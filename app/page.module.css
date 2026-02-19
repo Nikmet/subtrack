@@ -1,45 +1,40 @@
-.page {
+﻿.page {
     min-height: 100vh;
-    background: radial-gradient(
-        1200px 600px at 50% -240px,
-        #ffffff 0%,
-        #eef3f9 46%,
-        #e8edf4 100%
-    );
+    background: radial-gradient(900px 420px at 50% -180px, #ffffff 0%, #edf3fa 48%, #e8edf4 100%);
     color: #121d2d;
-    padding: 18px 14px 104px;
+    padding: var(--page-gutter-mobile) var(--page-gutter-mobile) 104px;
 }
 
 .container {
     margin: 0 auto;
     width: 100%;
-    max-width: 500px;
+    max-width: var(--content-max-soft);
 }
 
 .topBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .topActions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .logoutButton {
-    height: 36px;
+    height: 34px;
     border: 1px solid #ccd7e5;
-    border-radius: 11px;
+    border-radius: 9px;
     background: #ffffff;
     color: #173155;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.2;
     font-weight: 700;
-    padding: 0 12px;
+    padding: 0 10px;
     cursor: pointer;
 }
 
@@ -50,16 +45,16 @@
 .avatar {
     display: grid;
     place-items: center;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 2px solid #ffffff;
     background: linear-gradient(160deg, #2f3f56 0%, #101d2c 100%);
     color: #f6f9ff;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.04em;
-    box-shadow: 0 4px 12px rgba(15, 24, 36, 0.2);
+    box-shadow: 0 3px 10px rgba(15, 24, 36, 0.16);
 }
 
 .avatarLink {
@@ -68,23 +63,21 @@
 
 .layout {
     display: grid;
-    gap: 16px;
+    gap: 14px;
 }
 
 .summaryCard {
-    border-radius: 26px;
-    padding: 25px 18px 20px;
+    border-radius: 16px;
+    padding: 18px 16px 16px;
     background: linear-gradient(132deg, #0e2a4f 0%, #091f3b 42%, #0a1a31 100%);
-    box-shadow:
-        0 12px 24px rgba(6, 15, 28, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 16px rgba(6, 15, 28, 0.18);
 }
 
 .summaryLabel {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     color: rgba(228, 236, 250, 0.9);
-    font-size: 13px;
-    line-height: 1.25;
+    font-size: 12px;
+    line-height: 1.2;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -93,51 +86,51 @@
 .summaryAmountRow {
     display: flex;
     align-items: flex-end;
-    gap: 8px;
+    gap: 6px;
 }
 
 .summaryAmount {
     color: #f2f5fb;
-    font-size: clamp(42px, 13vw, 64px);
+    font-size: clamp(34px, 9vw, 52px);
     font-weight: 800;
-    line-height: 0.97;
+    line-height: 0.98;
     letter-spacing: 0.01em;
 }
 
 .summaryPerMonth {
     color: rgba(229, 236, 248, 0.82);
-    font-size: clamp(16px, 3.8vw, 21px);
+    font-size: 15px;
     line-height: 1.1;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     text-transform: lowercase;
 }
 
 .summaryBadge {
-    margin-top: 16px;
+    margin-top: 12px;
     width: fit-content;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     border-radius: 999px;
     background: rgba(120, 145, 190, 0.2);
     color: #e4ecfb;
-    padding: 7px 12px;
-    font-size: 14px;
+    padding: 6px 10px;
+    font-size: 13px;
     line-height: 1.3;
     font-weight: 600;
 }
 
 .summaryBadgeDot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: #70ffc0;
-    box-shadow: 0 0 0 4px rgba(112, 255, 192, 0.16);
+    box-shadow: 0 0 0 3px rgba(112, 255, 192, 0.16);
 }
 
 .subscriptionsSection {
     display: grid;
-    gap: 11px;
+    gap: 10px;
 }
 
 .subscriptionsHeader {
@@ -149,32 +142,32 @@
 .subscriptionsTitle {
     margin: 0;
     color: #121d2d;
-    font-size: clamp(24px, 5.6vw, 32px);
-    line-height: 1.13;
+    font-size: var(--fs-h1);
+    line-height: 1.15;
     font-weight: 800;
 }
 
 .subscriptionsList {
     display: grid;
-    gap: 10px;
+    gap: 8px;
 }
 
 .subscriptionCard {
     display: grid;
-    grid-template-columns: 58px 1fr auto;
+    grid-template-columns: 50px 1fr auto;
     align-items: center;
-    gap: 12px;
-    border-radius: 15px;
-    background: #e3e8ef;
-    border: 1px solid #d4dbe4;
-    padding: 11px 11px 11px 9px;
-    box-shadow: 0 1px 2px rgba(17, 28, 42, 0.14);
+    gap: 10px;
+    border-radius: 12px;
+    background: #e6ebf2;
+    border: 1px solid #d5dde8;
+    padding: 9px;
+    box-shadow: 0 1px 2px rgba(17, 28, 42, 0.08);
 }
 
 .subscriptionIconWrap {
-    width: 58px;
-    height: 58px;
-    border-radius: 13px;
+    width: 50px;
+    height: 50px;
+    border-radius: 11px;
     overflow: hidden;
     background: linear-gradient(135deg, #f4f7fc 0%, #d6dde8 100%);
     display: grid;
@@ -194,7 +187,7 @@
     display: grid;
     place-items: center;
     color: #1f3252;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1;
     font-weight: 800;
     background: linear-gradient(145deg, #f3f7fc 0%, #dbe4f0 100%);
@@ -207,8 +200,8 @@
 .subscriptionName {
     margin: 0;
     color: #101d2c;
-    font-size: 18px;
-    line-height: 1.22;
+    font-size: 16px;
+    line-height: 1.2;
     font-weight: 700;
     white-space: nowrap;
     overflow: hidden;
@@ -216,10 +209,10 @@
 }
 
 .subscriptionPeriod {
-    margin: 5px 0 0;
+    margin: 4px 0 0;
     color: #5f6d80;
-    font-size: 15px;
-    line-height: 1.35;
+    font-size: 13px;
+    line-height: 1.3;
 }
 
 .subscriptionPriceBlock {
@@ -229,72 +222,44 @@
 .subscriptionPrice {
     margin: 0;
     color: #121d2d;
-    font-size: 24px;
-    line-height: 1.08;
+    font-size: 20px;
+    line-height: 1.05;
     font-weight: 800;
 }
 
 .subscriptionPriceLabel {
-    margin: 3px 0 0;
+    margin: 2px 0 0;
     color: #4b5a6f;
-    font-size: 14px;
-    line-height: 1.35;
+    font-size: 12px;
+    line-height: 1.25;
 }
 
 .emptyState {
-    margin: 26px 0 0;
-    padding: 17px;
-    border-radius: 13px;
+    margin: 20px 0 0;
+    padding: 14px;
+    border-radius: 11px;
     background: #ffffff;
     color: #334055;
-    font-size: 16px;
-    line-height: 1.45;
+    font-size: 14px;
+    line-height: 1.4;
     border: 1px solid #d9e1eb;
 }
 
-@media (min-width: 720px) {
-    .page {
-        padding: 28px 24px 38px;
-    }
-
-    .container {
-        max-width: 710px;
-    }
-
-    .logoutButton {
-        height: 38px;
-    }
-
-    .summaryLabel {
-        font-size: 14px;
-    }
-
-    .summaryBadge {
-        font-size: 15px;
-    }
-}
-
-@media (min-width: 1040px) {
-    .page {
-        padding: 28px 24px 38px 120px;
-    }
-
-    .container {
-        max-width: 1080px;
-    }
-
+@media (min-width: 900px) {
     .layout {
-        grid-template-columns: minmax(360px, 430px) 1fr;
+        grid-template-columns: minmax(320px, 380px) 1fr;
         align-items: start;
-        gap: 24px;
+        gap: 18px;
     }
 
     .summaryCard {
         position: sticky;
-        top: 24px;
+        top: 18px;
     }
+}
 
-    .subscriptionsList {
-        gap: 12px;
+@media (min-width: 1200px) {
+    .page {
+        padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
     }
 }

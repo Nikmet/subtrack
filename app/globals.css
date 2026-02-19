@@ -3,6 +3,17 @@
 :root {
     --background: #edf2f9;
     --foreground: #122035;
+    --rail-width-desktop: 104px;
+    --page-gutter-mobile: 14px;
+    --page-gutter-desktop: 24px;
+    --content-max-soft: 1360px;
+
+    --fs-display: clamp(28px, 4.2vw, 40px);
+    --fs-h1: clamp(24px, 3.2vw, 34px);
+    --fs-h2: clamp(20px, 2.4vw, 28px);
+    --fs-title-sm: 18px;
+    --fs-body: 15px;
+    --fs-meta: 13px;
 }
 
 @theme inline {
@@ -16,6 +27,12 @@ body {
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-roboto), sans-serif;
-    font-size: 16px;
-    line-height: 1.45;
+    font-size: var(--fs-body);
+    line-height: 1.4;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }

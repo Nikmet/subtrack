@@ -1,37 +1,35 @@
-.page {
+﻿.page {
     min-height: 100vh;
     background: #e9eef5;
-    padding: 14px 14px 104px;
+    padding: var(--page-gutter-mobile) var(--page-gutter-mobile) 104px;
 }
 
 .container {
-    width: min(100%, 860px);
+    width: 100%;
+    max-width: var(--content-max-soft);
     margin: 0 auto;
-    background: #f6f8fb;
-    border: 1px solid #d9e2ee;
-    border-radius: 24px;
-    overflow: hidden;
 }
 
 .header {
-    height: 64px;
+    height: 58px;
     display: grid;
-    grid-template-columns: 48px 1fr 48px;
+    grid-template-columns: 40px 1fr 40px;
     align-items: center;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid #dde5ef;
     background: #f7f9fc;
+    border-radius: 12px;
+    padding: 0 6px;
 }
 
 .backButton {
-    width: 36px;
-    height: 36px;
-    margin-left: 8px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
     text-decoration: none;
     color: #9eabbc;
     display: grid;
     place-items: center;
-    font-size: 34px;
+    font-size: 26px;
     line-height: 1;
 }
 
@@ -39,32 +37,37 @@
     margin: 0;
     text-align: center;
     color: #112840;
-    font-size: 25px;
+    font-size: 22px;
     line-height: 1.1;
     font-weight: 800;
 }
 
 .headerPlaceholder {
-    width: 48px;
+    width: 40px;
 }
 
 .form {
-    padding: 18px 14px 20px;
+    margin-top: 10px;
+    max-width: 760px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #d9e2ee;
+    background: #f6f8fb;
     display: grid;
-    gap: 12px;
+    gap: 10px;
 }
 
 .iconField {
     display: grid;
     justify-items: center;
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 2px;
 }
 
 .iconDrop {
-    width: 84px;
-    height: 84px;
-    border-radius: 18px;
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
     border: 1px dashed #cfd9e6;
     background: #f0f4f8;
     display: grid;
@@ -81,7 +84,7 @@
 
 .iconPlaceholder {
     color: #b4bfce;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.1;
     font-weight: 700;
     text-transform: uppercase;
@@ -94,70 +97,70 @@
 .iconHint {
     margin: 0;
     color: #92a2b6;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.2;
 }
 
 .fieldGroup {
     display: grid;
-    gap: 6px;
+    gap: 5px;
 }
 
 .rowFields {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
 }
 
 .label {
     color: #9aaabd;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.2;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     font-weight: 700;
 }
 
 .input {
     width: 100%;
-    height: 46px;
-    border-radius: 12px;
+    height: 42px;
+    border-radius: 10px;
     border: 1px solid #d4deea;
     background: #f3f6fa;
     color: #182d49;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.2;
-    padding: 0 12px;
+    padding: 0 10px;
     outline: none;
 }
 
 .input:focus {
     border-color: #79aac8;
-    box-shadow: 0 0 0 3px rgba(121, 170, 200, 0.15);
+    box-shadow: 0 0 0 3px rgba(121, 170, 200, 0.13);
 }
 
 .staticHint {
     margin: 2px 0 0;
     color: #8a9cb2;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.2;
 }
 
 .errorText {
     margin: 0;
     color: #c23636;
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.3;
 }
 
 .submitButton {
-    margin-top: 8px;
-    height: 52px;
+    margin-top: 6px;
+    height: 46px;
     border: none;
-    border-radius: 14px;
+    border-radius: 12px;
     background: linear-gradient(140deg, #1fb8ce 0%, #43e0ca 100%);
     color: #ffffff;
-    font-size: 22px;
+    font-size: 16px;
     line-height: 1;
     font-weight: 800;
 }
@@ -166,13 +169,8 @@
     opacity: 0.75;
 }
 
-@media (min-width: 1040px) {
+@media (min-width: 1200px) {
     .page {
-        padding: 20px 16px 24px 120px;
-    }
-
-    .container {
-        max-width: 720px;
+        padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
     }
 }
-
