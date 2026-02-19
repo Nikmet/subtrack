@@ -97,7 +97,10 @@ export function AppMenu() {
 
   return (
     <nav className={styles.menu} aria-label="Main menu">
-      <Link href="/" className={`${styles.item} ${isHome ? styles.active : ""}`}>
+      <Link
+        href="/"
+        className={`${styles.item} ${styles.home} ${isHome ? styles.active : ""}`}
+      >
         <span className={styles.icon}>
           <HomeIcon />
         </span>
@@ -106,7 +109,7 @@ export function AppMenu() {
 
       <Link
         href="/calendar"
-        className={`${styles.item} ${isCalendar ? styles.active : ""}`}
+        className={`${styles.item} ${styles.calendar} ${isCalendar ? styles.active : ""}`}
       >
         <span className={styles.icon}>
           <CalendarIcon />
@@ -116,20 +119,26 @@ export function AppMenu() {
 
       <Link
         href="/subscriptions/new"
-        className={`${styles.plus} ${isCreate ? styles.plusActive : ""}`}
+        className={`${styles.plus} ${styles.plusControl} ${isCreate ? styles.plusActive : ""}`}
         aria-label="Добавить подписку"
       >
         <PlusIcon />
       </Link>
 
-      <Link href="/search" className={`${styles.item} ${isSearch ? styles.active : ""}`}>
+      <Link
+        href="/search"
+        className={`${styles.item} ${styles.search} ${isSearch ? styles.active : ""}`}
+      >
         <span className={styles.icon}>
           <SearchIcon />
         </span>
         <span className={styles.label}>Поиск</span>
       </Link>
 
-      <Link href="/profile" className={`${styles.item} ${isProfile ? styles.active : ""}`}>
+      <Link
+        href="/profile"
+        className={`${styles.item} ${styles.profile} ${isProfile ? styles.active : ""}`}
+      >
         <span className={styles.icon}>
           <ProfileIcon />
         </span>
