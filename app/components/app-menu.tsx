@@ -83,6 +83,18 @@ const PlusIcon = () => (
   </svg>
 );
 
+const LogoIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden>
+    <rect x="3" y="3" width="18" height="18" rx="5" fill="currentColor" />
+    <path
+      d="M8 9.5h8M8 12h8M8 14.5h5.5"
+      stroke="#fff"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+    />
+  </svg>
+);
+
 export function AppMenu() {
   const pathname = usePathname();
 
@@ -97,6 +109,13 @@ export function AppMenu() {
 
   return (
     <nav className={styles.menu} aria-label="Main menu">
+      <Link href="/" className={styles.brand} aria-label="SubsManager">
+        <span className={styles.brandIcon}>
+          <LogoIcon />
+        </span>
+        <span className={styles.brandText}>SubsManager</span>
+      </Link>
+
       <Link
         href="/"
         className={`${styles.item} ${styles.home} ${isHome ? styles.active : ""}`}

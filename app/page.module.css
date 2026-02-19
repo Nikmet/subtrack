@@ -1,8 +1,8 @@
-﻿.page {
+.page {
     min-height: 100vh;
-    background: radial-gradient(900px 420px at 50% -180px, #ffffff 0%, #edf3fa 48%, #e8edf4 100%);
-    color: #121d2d;
-    padding: var(--page-gutter-mobile) var(--page-gutter-mobile) 104px;
+    background: #e4eaf1;
+    color: #1f3246;
+    padding: 14px var(--page-gutter-mobile) 104px;
 }
 
 .container {
@@ -13,73 +13,112 @@
 
 .topBar {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.headerBlock {
+    display: grid;
+    gap: 4px;
+}
+
+.pageTitle {
+    margin: 0;
+    color: #203444;
+    font-size: clamp(32px, 3.6vw, 48px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.pageSubtitle {
+    margin: 0;
+    color: #8f9ead;
+    font-size: 15px;
+    line-height: 1.25;
+    font-weight: 500;
 }
 
 .topActions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    padding-top: 2px;
 }
 
-.logoutButton {
-    height: 34px;
-    border: 1px solid #ccd7e5;
-    border-radius: 9px;
-    background: #ffffff;
-    color: #173155;
-    font-size: 13px;
-    line-height: 1.2;
-    font-weight: 700;
-    padding: 0 10px;
-    cursor: pointer;
-}
-
-.logoutButton:hover {
-    border-color: #9ab0cc;
-}
-
-.avatar {
+.notifyButton {
     display: grid;
     place-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #ffffff;
-    background: linear-gradient(160deg, #2f3f56 0%, #101d2c 100%);
-    color: #f6f9ff;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    box-shadow: 0 3px 10px rgba(15, 24, 36, 0.16);
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid #d4dce7;
+    background: #f6f8fb;
+    color: #8ea1b4;
+    text-decoration: none;
+    transition: border-color 170ms ease, color 170ms ease, background-color 170ms ease;
+}
+
+.notifyButton svg {
+    width: 15px;
+    height: 15px;
+}
+
+.notifyButton:hover {
+    border-color: #c1ccda;
+    color: #5f7388;
+    background: #ffffff;
+}
+
+.notifyButton:focus-visible {
+    outline: 2px solid #24c4d2;
+    outline-offset: 2px;
 }
 
 .avatarLink {
     text-decoration: none;
 }
 
+.avatar {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid #d4dce7;
+    background: #ffffff;
+    color: #1d3146;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 700;
+}
+
 .layout {
+    display: grid;
+    gap: 16px;
+}
+
+.leftColumn {
     display: grid;
     gap: 14px;
 }
 
 .summaryCard {
-    border-radius: 16px;
-    padding: 18px 16px 16px;
-    background: linear-gradient(132deg, #0e2a4f 0%, #091f3b 42%, #0a1a31 100%);
-    box-shadow: 0 8px 16px rgba(6, 15, 28, 0.18);
+    border-radius: 12px;
+    padding: 20px 24px;
+    background: linear-gradient(118deg, #1f2d46 0%, #243a58 100%);
+    box-shadow: 0 8px 18px rgba(22, 34, 50, 0.24);
 }
 
 .summaryLabel {
     margin: 0 0 8px;
-    color: rgba(228, 236, 250, 0.9);
+    color: rgba(220, 229, 240, 0.84);
     font-size: 12px;
     line-height: 1.2;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
 }
 
@@ -90,42 +129,42 @@
 }
 
 .summaryAmount {
-    color: #f2f5fb;
-    font-size: clamp(34px, 9vw, 52px);
+    margin: 0;
+    color: #f7faff;
+    font-size: clamp(38px, 6.5vw, 56px);
+    line-height: 0.95;
     font-weight: 800;
-    line-height: 0.98;
-    letter-spacing: 0.01em;
 }
 
 .summaryPerMonth {
-    color: rgba(229, 236, 248, 0.82);
-    font-size: 15px;
-    line-height: 1.1;
-    margin-bottom: 4px;
-    text-transform: lowercase;
+    color: rgba(220, 230, 244, 0.86);
+    font-size: 32px;
+    line-height: 1;
+    margin-bottom: 5px;
+    font-weight: 700;
 }
 
 .summaryBadge {
-    margin-top: 12px;
+    margin-top: 14px;
     width: fit-content;
     display: inline-flex;
     align-items: center;
-    gap: 7px;
+    gap: 8px;
     border-radius: 999px;
-    background: rgba(120, 145, 190, 0.2);
-    color: #e4ecfb;
-    padding: 6px 10px;
-    font-size: 13px;
-    line-height: 1.3;
-    font-weight: 600;
+    padding: 7px 12px;
+    background: rgba(136, 153, 183, 0.24);
+    color: #eaf1fb;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 700;
 }
 
 .summaryBadgeDot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #70ffc0;
-    box-shadow: 0 0 0 3px rgba(112, 255, 192, 0.16);
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #43df86;
+    box-shadow: 0 0 0 4px rgba(67, 223, 134, 0.18);
 }
 
 .subscriptionsSection {
@@ -133,43 +172,41 @@
     gap: 10px;
 }
 
-.subscriptionsHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.subscriptionsTitle {
+.sectionTitle {
     margin: 0;
-    color: #121d2d;
-    font-size: var(--fs-h1);
-    line-height: 1.15;
+    color: #203545;
+    font-size: clamp(28px, 3vw, 42px);
+    line-height: 1.08;
     font-weight: 800;
+    letter-spacing: -0.01em;
 }
 
 .subscriptionsList {
-    display: grid;
-    gap: 8px;
+    border: 1px solid #d7e0ea;
+    border-radius: 10px;
+    background: #f8fafd;
+    overflow: hidden;
 }
 
 .subscriptionCard {
     display: grid;
-    grid-template-columns: 50px 1fr auto;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
     align-items: center;
-    gap: 10px;
-    border-radius: 12px;
-    background: #e6ebf2;
-    border: 1px solid #d5dde8;
-    padding: 9px;
-    box-shadow: 0 1px 2px rgba(17, 28, 42, 0.08);
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #dfe7ef;
+}
+
+.subscriptionCard:last-child {
+    border-bottom: none;
 }
 
 .subscriptionIconWrap {
-    width: 50px;
-    height: 50px;
-    border-radius: 11px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     overflow: hidden;
-    background: linear-gradient(135deg, #f4f7fc 0%, #d6dde8 100%);
+    background: #e9eff6;
     display: grid;
     place-items: center;
 }
@@ -186,11 +223,10 @@
     height: 100%;
     display: grid;
     place-items: center;
-    color: #1f3252;
+    color: #32506a;
     font-size: 20px;
     line-height: 1;
     font-weight: 800;
-    background: linear-gradient(145deg, #f3f7fc 0%, #dbe4f0 100%);
 }
 
 .subscriptionMain {
@@ -199,7 +235,7 @@
 
 .subscriptionName {
     margin: 0;
-    color: #101d2c;
+    color: #1f3448;
     font-size: 16px;
     line-height: 1.2;
     font-weight: 700;
@@ -208,11 +244,14 @@
     text-overflow: ellipsis;
 }
 
-.subscriptionPeriod {
+.subscriptionMeta {
     margin: 4px 0 0;
-    color: #5f6d80;
-    font-size: 13px;
-    line-height: 1.3;
+    color: #8fa0b1;
+    font-size: 14px;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .subscriptionPriceBlock {
@@ -221,45 +260,172 @@
 
 .subscriptionPrice {
     margin: 0;
-    color: #121d2d;
-    font-size: 20px;
-    line-height: 1.05;
+    color: #243b51;
+    font-size: 15px;
+    line-height: 1.2;
     font-weight: 800;
 }
 
 .subscriptionPriceLabel {
     margin: 2px 0 0;
-    color: #4b5a6f;
-    font-size: 12px;
-    line-height: 1.25;
+    color: #95a5b5;
+    font-size: 13px;
+    line-height: 1.2;
 }
 
 .emptyState {
-    margin: 20px 0 0;
-    padding: 14px;
-    border-radius: 11px;
-    background: #ffffff;
-    color: #334055;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px dashed #c8d2e0;
+    background: #f8fafd;
+    color: #5f7083;
     font-size: 14px;
     line-height: 1.4;
-    border: 1px solid #d9e1eb;
 }
 
-@media (min-width: 900px) {
-    .layout {
-        grid-template-columns: minmax(320px, 380px) 1fr;
-        align-items: start;
-        gap: 18px;
-    }
+.rightColumn {
+    display: grid;
+    align-content: start;
+}
 
-    .summaryCard {
-        position: sticky;
-        top: 18px;
+.categorySection {
+    border-radius: 10px;
+    border: 1px solid #d7e0ea;
+    background: #f8fafd;
+    padding: 16px 16px 14px;
+}
+
+.analyticsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.analyticsTitle {
+    margin: 0;
+    color: #24384b;
+    font-size: 32px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.analyticsTotal {
+    margin: 0;
+    border-radius: 8px;
+    background: #eaf1f1;
+    color: #8fa0af;
+    padding: 5px 8px;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.categoryList {
+    display: grid;
+    gap: 14px;
+}
+
+.categoryItem {
+    display: grid;
+    gap: 5px;
+}
+
+.categoryHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.categoryName {
+    margin: 0;
+    color: #24394c;
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.categoryValue {
+    margin: 0;
+    color: #24394c;
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.progressTrack {
+    width: 100%;
+    height: 7px;
+    border-radius: 999px;
+    background: #dce9e9;
+    overflow: hidden;
+}
+
+.progressFill {
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--bar-color, #39cfc2);
+}
+
+.categoryShare {
+    margin: 0;
+    color: #95a5b5;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+.categoryEmpty {
+    display: grid;
+    gap: 10px;
+}
+
+.categoryEmptyText {
+    margin: 0;
+    color: #8d9dad;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.categoryEmptyLink {
+    width: fit-content;
+    text-decoration: none;
+    border-radius: 8px;
+    background: #1f334b;
+    color: #f5fbff;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 700;
+    padding: 8px 11px;
+    transition: background-color 170ms ease;
+}
+
+.categoryEmptyLink:hover {
+    background: #2b486a;
+}
+
+.categoryEmptyLink:focus-visible {
+    outline: 2px solid #24c4d2;
+    outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+    .summaryPerMonth {
+        font-size: 20px;
+        margin-bottom: 4px;
     }
 }
 
 @media (min-width: 1200px) {
     .page {
-        padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
+        padding: 12px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
+    }
+
+    .layout {
+        grid-template-columns: minmax(0, 1fr) 276px;
+        gap: 18px;
+        align-items: start;
     }
 }
