@@ -1,0 +1,300 @@
+.page {
+    min-height: 100vh;
+    background: radial-gradient(
+        1200px 600px at 50% -240px,
+        #ffffff 0%,
+        #eef3f9 46%,
+        #e8edf4 100%
+    );
+    color: #121d2d;
+    padding: 18px 14px 104px;
+}
+
+.container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+}
+
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.topActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logoutButton {
+    height: 36px;
+    border: 1px solid #ccd7e5;
+    border-radius: 11px;
+    background: #ffffff;
+    color: #173155;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 700;
+    padding: 0 12px;
+    cursor: pointer;
+}
+
+.logoutButton:hover {
+    border-color: #9ab0cc;
+}
+
+.avatar {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    background: linear-gradient(160deg, #2f3f56 0%, #101d2c 100%);
+    color: #f6f9ff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 12px rgba(15, 24, 36, 0.2);
+}
+
+.avatarLink {
+    text-decoration: none;
+}
+
+.layout {
+    display: grid;
+    gap: 16px;
+}
+
+.summaryCard {
+    border-radius: 26px;
+    padding: 25px 18px 20px;
+    background: linear-gradient(132deg, #0e2a4f 0%, #091f3b 42%, #0a1a31 100%);
+    box-shadow:
+        0 12px 24px rgba(6, 15, 28, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.summaryLabel {
+    margin: 0 0 10px;
+    color: rgba(228, 236, 250, 0.9);
+    font-size: 13px;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.summaryAmountRow {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.summaryAmount {
+    color: #f2f5fb;
+    font-size: clamp(42px, 13vw, 64px);
+    font-weight: 800;
+    line-height: 0.97;
+    letter-spacing: 0.01em;
+}
+
+.summaryPerMonth {
+    color: rgba(229, 236, 248, 0.82);
+    font-size: clamp(16px, 3.8vw, 21px);
+    line-height: 1.1;
+    margin-bottom: 5px;
+    text-transform: lowercase;
+}
+
+.summaryBadge {
+    margin-top: 16px;
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    background: rgba(120, 145, 190, 0.2);
+    color: #e4ecfb;
+    padding: 7px 12px;
+    font-size: 14px;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.summaryBadgeDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #70ffc0;
+    box-shadow: 0 0 0 4px rgba(112, 255, 192, 0.16);
+}
+
+.subscriptionsSection {
+    display: grid;
+    gap: 11px;
+}
+
+.subscriptionsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.subscriptionsTitle {
+    margin: 0;
+    color: #121d2d;
+    font-size: clamp(24px, 5.6vw, 32px);
+    line-height: 1.13;
+    font-weight: 800;
+}
+
+.subscriptionsList {
+    display: grid;
+    gap: 10px;
+}
+
+.subscriptionCard {
+    display: grid;
+    grid-template-columns: 58px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    border-radius: 15px;
+    background: #e3e8ef;
+    border: 1px solid #d4dbe4;
+    padding: 11px 11px 11px 9px;
+    box-shadow: 0 1px 2px rgba(17, 28, 42, 0.14);
+}
+
+.subscriptionIconWrap {
+    width: 58px;
+    height: 58px;
+    border-radius: 13px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f4f7fc 0%, #d6dde8 100%);
+    display: grid;
+    place-items: center;
+}
+
+.subscriptionIcon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.subscriptionFallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: #1f3252;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 800;
+    background: linear-gradient(145deg, #f3f7fc 0%, #dbe4f0 100%);
+}
+
+.subscriptionMain {
+    min-width: 0;
+}
+
+.subscriptionName {
+    margin: 0;
+    color: #101d2c;
+    font-size: 18px;
+    line-height: 1.22;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subscriptionPeriod {
+    margin: 5px 0 0;
+    color: #5f6d80;
+    font-size: 15px;
+    line-height: 1.35;
+}
+
+.subscriptionPriceBlock {
+    text-align: right;
+}
+
+.subscriptionPrice {
+    margin: 0;
+    color: #121d2d;
+    font-size: 24px;
+    line-height: 1.08;
+    font-weight: 800;
+}
+
+.subscriptionPriceLabel {
+    margin: 3px 0 0;
+    color: #4b5a6f;
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.emptyState {
+    margin: 26px 0 0;
+    padding: 17px;
+    border-radius: 13px;
+    background: #ffffff;
+    color: #334055;
+    font-size: 16px;
+    line-height: 1.45;
+    border: 1px solid #d9e1eb;
+}
+
+@media (min-width: 720px) {
+    .page {
+        padding: 28px 24px 38px;
+    }
+
+    .container {
+        max-width: 710px;
+    }
+
+    .logoutButton {
+        height: 38px;
+    }
+
+    .summaryLabel {
+        font-size: 14px;
+    }
+
+    .summaryBadge {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 1040px) {
+    .page {
+        padding: 28px 24px 38px 120px;
+    }
+
+    .container {
+        max-width: 1080px;
+    }
+
+    .layout {
+        grid-template-columns: minmax(360px, 430px) 1fr;
+        align-items: start;
+        gap: 24px;
+    }
+
+    .summaryCard {
+        position: sticky;
+        top: 24px;
+    }
+
+    .subscriptionsList {
+        gap: 12px;
+    }
+}

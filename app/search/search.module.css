@@ -1,0 +1,269 @@
+.page {
+    min-height: 100vh;
+    background: #e8edf4;
+    padding: 18px 14px 104px;
+}
+
+.container {
+    width: min(100%, 860px);
+    margin: 0 auto;
+}
+
+.title {
+    margin: 0;
+    color: #10233f;
+    font-size: clamp(33px, 8vw, 46px);
+    line-height: 1.05;
+    font-weight: 800;
+}
+
+.searchForm {
+    margin-top: 14px;
+}
+
+.searchInput {
+    width: 100%;
+    height: 48px;
+    border: 1px solid #dae2ed;
+    border-radius: 14px;
+    background: #f3f6fa;
+    color: #1a2d47;
+    font-size: 16px;
+    line-height: 1.2;
+    padding: 0 14px;
+    outline: none;
+}
+
+.searchInput:focus {
+    border-color: #8db2d0;
+    box-shadow: 0 0 0 3px rgba(86, 171, 202, 0.18);
+}
+
+.section {
+    margin-top: 22px;
+}
+
+.sectionHead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sectionTitle {
+    margin: 0;
+    color: #122842;
+    font-size: clamp(24px, 6vw, 31px);
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.sectionLink {
+    color: #22b8ce;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.categoryGrid {
+    margin-top: 10px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.categoryCard {
+    height: 56px;
+    border-radius: 14px;
+    border: 1px solid #d7dee8;
+    background: #f4f6f8;
+    text-decoration: none;
+    color: #19304e;
+    display: grid;
+    align-items: center;
+    padding: 0 14px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.categoryCardActive {
+    border-color: #68b7cc;
+    background: #e8f8fc;
+}
+
+.categoryName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list {
+    margin-top: 10px;
+    display: grid;
+    gap: 10px;
+}
+
+.itemCard {
+    display: grid;
+    grid-template-columns: 44px 1fr auto auto;
+    align-items: center;
+    gap: 11px;
+    border-radius: 14px;
+    border: 1px solid #d9e1eb;
+    background: #f4f6f8;
+    padding: 11px 10px;
+}
+
+.itemIconWrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.itemIconImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.itemIconFallback {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #e8ecf2;
+    color: #8493a8;
+    font-size: 20px;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+}
+
+.itemMain {
+    min-width: 0;
+}
+
+.itemName {
+    margin: 0;
+    color: #10233f;
+    font-size: 20px;
+    line-height: 1.15;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.itemCategory {
+    margin: 3px 0 0;
+    color: #8899af;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.itemPriceWrap {
+    text-align: right;
+}
+
+.itemPrice {
+    margin: 0;
+    color: #182c49;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.itemPriceLabel {
+    margin: 2px 0 0;
+    color: #98a6ba;
+    font-size: 13px;
+    line-height: 1.2;
+}
+
+.addButton {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: #eaf8fc;
+    color: #1ab5cb;
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+    font-size: 29px;
+    line-height: 1;
+    font-weight: 300;
+}
+
+.emptyState {
+    margin-top: 10px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #f5f7fa;
+    border: 1px solid #d9e1ec;
+    color: #3f5168;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.emptyText {
+    margin: 0;
+}
+
+.emptyAction {
+    margin-top: 12px;
+    width: fit-content;
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 10px;
+    background: #dff8fb;
+    color: #0e7386;
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.ctaCard {
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 20px 16px;
+    background: linear-gradient(135deg, #0c2141 0%, #19243f 58%, #24344f 100%);
+    color: #ecf5ff;
+}
+
+.ctaTitle {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.05;
+    font-weight: 800;
+}
+
+.ctaText {
+    margin: 10px 0 0;
+    color: #b4c8df;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.ctaButton {
+    margin-top: 14px;
+    height: 50px;
+    border-radius: 14px;
+    background: linear-gradient(140deg, #1eb8ce 0%, #46e0ca 100%);
+    color: #0e2034;
+    font-size: 20px;
+    font-weight: 800;
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+}
+
+@media (min-width: 1040px) {
+    .page {
+        padding: 22px 16px 24px 120px;
+    }
+}

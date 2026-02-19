@@ -1,0 +1,121 @@
+.menu {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: min(100%, 900px);
+    height: 92px;
+    background: rgba(255, 255, 255, 0.98);
+    border-top: 1px solid #dfe6ef;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    padding: 10px 14px 12px;
+    z-index: 30;
+    box-shadow: 0 -8px 24px rgba(11, 24, 39, 0.08);
+}
+
+.item {
+    border: none;
+    background: transparent;
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    color: #69798f;
+    text-decoration: none;
+    padding: 2px 0;
+    min-width: 64px;
+}
+
+.item:disabled {
+    opacity: 0.92;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+}
+
+.icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.label {
+    font-size: 11px;
+    line-height: 1.1;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.active {
+    color: #0d4b7b;
+}
+
+.active .icon {
+    border: 1px solid #8db0cc;
+    border-radius: 10px;
+    background: #f1f8ff;
+}
+
+.plus {
+    width: 62px;
+    height: 62px;
+    border: none;
+    border-radius: 22px;
+    background: linear-gradient(140deg, #56e4df 0%, #22bace 100%);
+    color: #f3fcff;
+    box-shadow: 0 8px 18px rgba(27, 172, 190, 0.42);
+    display: grid;
+    place-items: center;
+    margin-top: -28px;
+    text-decoration: none;
+}
+
+.plus svg {
+    width: 31px;
+    height: 31px;
+}
+
+.plusActive {
+    outline: 2px solid #a2eef2;
+    outline-offset: 2px;
+}
+
+@media (min-width: 1040px) {
+    .menu {
+        left: 16px;
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+        width: 88px;
+        height: auto;
+        border-top: none;
+        border: 1px solid #d7e2ee;
+        border-radius: 20px;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 14px 8px;
+        background: rgba(255, 255, 255, 0.95);
+    }
+
+    .item {
+        min-width: 0;
+    }
+
+    .label {
+        font-size: 10px;
+    }
+
+    .plus {
+        margin-top: 2px;
+        margin-bottom: 2px;
+        width: 58px;
+        height: 58px;
+        border-radius: 20px;
+    }
+}

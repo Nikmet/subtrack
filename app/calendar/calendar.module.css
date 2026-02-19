@@ -1,0 +1,355 @@
+﻿.page {
+    min-height: 100vh;
+    background: #e8edf4;
+    padding: 0 0 104px;
+}
+
+.container {
+    width: min(100%, 900px);
+    margin: 0 auto;
+}
+
+.calendarCard {
+    background: #f8fafc;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border: 1px solid #dce4ee;
+    border-top: none;
+    padding: 0 14px 14px;
+    box-shadow: 0 2px 8px rgba(16, 35, 63, 0.06);
+}
+
+.calendarHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 74px;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 4px 0;
+}
+
+.title {
+    margin: 0;
+    color: #0f2742;
+    font-size: clamp(30px, 8vw, 49px);
+    line-height: 1;
+    font-weight: 800;
+}
+
+.monthNav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.monthArrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: #95a4b9;
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+    font-size: 38px;
+    line-height: 1;
+}
+
+.monthArrow:hover {
+    background: #edf2f8;
+}
+
+.monthTitle {
+    margin: 0;
+    min-width: 170px;
+    text-align: center;
+    color: #0f2742;
+    font-size: clamp(27px, 6vw, 43px);
+    line-height: 1.05;
+    font-weight: 700;
+}
+
+.weekRow {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    justify-items: center;
+}
+
+.weekday {
+    color: #95a6bc;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.grid {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    row-gap: 8px;
+}
+
+.dayCell {
+    height: 58px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #142845;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 600;
+    position: relative;
+}
+
+.dayCellMuted {
+    color: #d4dbe6;
+}
+
+.dayCellSelected {
+    color: #f0f8ff;
+    background: #0b1e39;
+    box-shadow: 0 8px 18px rgba(12, 28, 53, 0.26);
+}
+
+.dayCellToday {
+    border: 2px solid #20b9cd;
+    color: #123153;
+}
+
+.dayDot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #27bed4;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.daySection {
+    margin-top: 22px;
+    padding: 0 14px;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sectionTitle {
+    margin: 0;
+    color: #0f2742;
+    font-size: clamp(33px, 8vw, 48px);
+    line-height: 1;
+    font-weight: 800;
+}
+
+.sectionMeta {
+    margin: 0;
+    color: #9caec4;
+    font-size: 18px;
+    line-height: 1.2;
+}
+
+.emptyCard {
+    margin-top: 12px;
+    border-radius: 18px;
+    border: 1px dashed #d9e2ed;
+    background: #f5f7fb;
+    padding: 22px 16px;
+    text-align: center;
+}
+
+.emptyIcon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background: #edf1f6;
+    color: #c5cfdd;
+    display: grid;
+    place-items: center;
+}
+
+.emptyIcon svg {
+    width: 31px;
+    height: 31px;
+}
+
+.emptyText {
+    margin: 12px 0 0;
+    color: #8da1ba;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.eventsList {
+    margin-top: 12px;
+    display: grid;
+    gap: 10px;
+}
+
+.eventCard {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    align-items: center;
+    gap: 11px;
+    border-radius: 14px;
+    border: 1px solid #d7e0eb;
+    background: #f5f8fb;
+    padding: 10px;
+}
+
+.eventIconWrap {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.eventIconImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.eventIconFallback {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #eef3f9 0%, #dce4ef 100%);
+    color: #213755;
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.eventMain {
+    min-width: 0;
+}
+
+.eventName {
+    margin: 0;
+    color: #122842;
+    font-size: 19px;
+    line-height: 1.15;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.eventSubtext {
+    margin: 4px 0 0;
+    color: #8498b1;
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.eventAmount {
+    margin: 0;
+    color: #112640;
+    font-size: 21px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.summarySection {
+    margin-top: 28px;
+    padding: 0 14px;
+}
+
+.summaryTitle {
+    margin: 0;
+    color: #0f2742;
+    font-size: clamp(40px, 9vw, 56px);
+    line-height: 1;
+    font-weight: 800;
+}
+
+.summaryCard {
+    margin-top: 12px;
+    border-radius: 26px;
+    padding: 19px 16px 17px;
+    background: linear-gradient(132deg, #0a1e3c 0%, #081d36 48%, #0a3e56 100%);
+    box-shadow: 0 10px 20px rgba(6, 17, 31, 0.2);
+}
+
+.summaryLabel {
+    margin: 0;
+    color: #a5bfd8;
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+.summaryAmount {
+    margin: 9px 0 0;
+    color: #f4fbff;
+    font-size: clamp(56px, 11vw, 74px);
+    line-height: 0.95;
+    font-weight: 800;
+}
+
+.summaryBadges {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.badge,
+.badgeAccent {
+    height: 33px;
+    border-radius: 999px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 700;
+}
+
+.badge {
+    color: #e8f2ff;
+    background: rgba(104, 129, 166, 0.35);
+}
+
+.badgeAccent {
+    color: #2ce1d3;
+    background: rgba(36, 120, 128, 0.42);
+}
+
+@media (min-width: 1040px) {
+    .page {
+        padding: 18px 16px 28px 120px;
+    }
+
+    .calendarCard {
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+    }
+
+    .title {
+        font-size: 44px;
+    }
+
+    .monthTitle {
+        font-size: 37px;
+    }
+
+    .sectionTitle {
+        font-size: 42px;
+    }
+
+    .summaryTitle {
+        font-size: 48px;
+    }
+}
