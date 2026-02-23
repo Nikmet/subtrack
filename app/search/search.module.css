@@ -183,18 +183,24 @@
     line-height: 1.2;
 }
 
+.addForm {
+    margin: 0;
+}
+
 .addButton {
     width: 30px;
     height: 30px;
     border-radius: 999px;
     background: #eaf8fc;
     color: #1ab5cb;
+    border: none;
     text-decoration: none;
     display: grid;
     place-items: center;
     font-size: 24px;
     line-height: 1;
     font-weight: 300;
+    cursor: pointer;
 }
 
 .emptyState {

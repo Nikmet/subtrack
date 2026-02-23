@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { AppMenu } from "@/app/components/app-menu/app-menu";
 import { SubscriptionIcon } from "@/app/components/subscription-icon/subscription-icon";
 
+import { quickAddSubscriptionAction } from "./actions";
 import { getCategories, getPopularTypes, searchTypes } from "./data";
 import styles from "./search.module.css";
 
@@ -29,14 +30,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     const params = await searchParams;
     const q = (params.q ?? "").trim();
     const category = (params.category ?? "").trim();
-
-    const [categories, popularTypes, matchedTypes] = await Promise.all([
-        getCategories(),
-        getPopularTypes(8),
-        searchTypes(q, category || undefined)
-    ]);
-
     const hasFilters = q.length > 0 || category.length > 0;
+
+    const [categories, popularTypes] = await Promise.all([
+        getCategories(),
+        getPopularTypes(8)
+    ]);
+    const matchedTypes = hasFilters ? await searchTypes(q, category || undefined) : [];
 
     return (
         <main className={styles.page}>
@@ -102,13 +102,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                                             <p className={styles.itemPrice}>{formatRub(item.suggestedMonthlyPrice)}</p>
                                             <p className={styles.itemPriceLabel}>/мес</p>
                                         </div>
-                                        <Link
-                                            href={`/subscriptions/new?typeId=${item.id}`}
-                                            className={styles.addButton}
-                                            aria-label={`Добавить ${item.name}`}
-                                        >
-                                            +
-                                        </Link>
+                                        <form action={quickAddSubscriptionAction} className={styles.addForm}>
+                                            <input type="hidden" name="name" value={item.name} />
+                                            <input type="hidden" name="imgLink" value={item.imgLink} />
+                                            <input type="hidden" name="category" value={item.categorySlug} />
+                                            <input
+                                                type="hidden"
+                                                name="suggestedMonthlyPrice"
+                                                value={item.suggestedMonthlyPrice?.toString() ?? ""}
+                                            />
+                                            <button
+                                                type="submit"
+                                                className={styles.addButton}
+                                                aria-label={`Добавить ${item.name}`}
+                                            >
+                                                +
+                                            </button>
+                                        </form>
                                     </article>
                                 ))}
                             </div>
@@ -117,7 +127,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                                 <p className={styles.emptyText}>
                                     По вашему запросу ничего не найдено. Попробуйте создать подписку вручную.
                                 </p>
-                                <Link href="/subscriptions/new?custom=1" className={styles.emptyAction}>
+                                <Link href="/subscriptions/new" className={styles.emptyAction}>
                                     Создать вручную
                                 </Link>
                             </div>
@@ -151,13 +161,23 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                                     <p className={styles.itemPrice}>{formatRub(item.suggestedMonthlyPrice)}</p>
                                     <p className={styles.itemPriceLabel}>/мес</p>
                                 </div>
-                                <Link
-                                    href={`/subscriptions/new?typeId=${item.id}`}
-                                    className={styles.addButton}
-                                    aria-label={`Добавить ${item.name}`}
-                                >
-                                    +
-                                </Link>
+                                <form action={quickAddSubscriptionAction} className={styles.addForm}>
+                                    <input type="hidden" name="name" value={item.name} />
+                                    <input type="hidden" name="imgLink" value={item.imgLink} />
+                                    <input type="hidden" name="category" value={item.categorySlug} />
+                                    <input
+                                        type="hidden"
+                                        name="suggestedMonthlyPrice"
+                                        value={item.suggestedMonthlyPrice?.toString() ?? ""}
+                                    />
+                                    <button
+                                        type="submit"
+                                        className={styles.addButton}
+                                        aria-label={`Добавить ${item.name}`}
+                                    >
+                                        +
+                                    </button>
+                                </form>
                             </article>
                         ))}
                     </div>
@@ -166,7 +186,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <section className={styles.ctaCard}>
                     <h3 className={styles.ctaTitle}>Не нашли сервис?</h3>
                     <p className={styles.ctaText}>Добавьте свою подписку вручную со своими условиями и иконкой.</p>
-                    <Link href="/subscriptions/new?custom=1" className={styles.ctaButton}>
+                    <Link href="/subscriptions/new" className={styles.ctaButton}>
                         Создать вручную
                     </Link>
                 </section>

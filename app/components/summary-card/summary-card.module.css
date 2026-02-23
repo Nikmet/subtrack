@@ -1,13 +1,13 @@
 .summaryCard {
     border-radius: 18px;
-    padding: 24px 28px 22px;
+    padding: 32px 28px 30px;
     min-height: 180px;
     background: linear-gradient(120deg, #12243d 0%, #2d4668 100%);
     box-shadow: 0 14px 32px rgba(19, 34, 54, 0.2);
 }
 
 .summaryLabel {
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     color: rgba(223, 233, 248, 0.95);
     font-size: 12px;
     line-height: 1.25;

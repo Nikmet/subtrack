@@ -1,4 +1,5 @@
 import { OTHER_CATEGORY_NAME } from "@/app/constants/home";
+import { getSubscriptionCategoryLabel } from "@/app/constants/subscription-categories";
 import type { CategoryStat, HomeScreenData, SubscriptionListItem } from "@/app/types/home";
 import { prisma } from "@/lib/prisma";
 
@@ -63,13 +64,6 @@ export async function getHomeScreenData(userId: string): Promise<HomeScreenData 
         where: { id: userId },
         include: {
             subscribes: {
-                include: {
-                    type: {
-                        include: {
-                            category: true
-                        }
-                    }
-                },
                 orderBy: [{ nextPaymentAt: "asc" }, { id: "asc" }]
             }
         }
@@ -89,9 +83,9 @@ export async function getHomeScreenData(userId: string): Promise<HomeScreenData 
             monthlyPrice,
             period: item.period,
             nextPaymentAt: item.nextPaymentAt,
-            typeName: item.type.name,
-            typeImage: item.type.imgLink ?? "",
-            categoryName: item.type.category?.name ?? OTHER_CATEGORY_NAME
+            typeName: item.name,
+            typeImage: item.imgLink ?? "",
+            categoryName: getSubscriptionCategoryLabel(item.category)
         };
     });
 

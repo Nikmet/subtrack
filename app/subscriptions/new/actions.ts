@@ -2,22 +2,21 @@
 
 import { redirect } from "next/navigation";
 
+import {
+  DEFAULT_SUBSCRIPTION_CATEGORY,
+  isSubscriptionCategory,
+} from "@/app/constants/subscription-categories";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 export type NewSubscriptionState = {
   error: string | null;
-  needsDuplicateConfirm: boolean;
-  duplicateMessage: string | null;
-  confirmNonce: string | null;
 };
 
 const allowedPeriods = new Set([1, 3, 6, 12]);
 
 const formatRub = (value: number) =>
-  `${new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(
-    Math.round(value),
-  )}₽`;
+  `${new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 }).format(Math.round(value))}₽`;
 
 const parsePrice = (value: string): number | null => {
   const normalized = value.replace(",", ".").trim();
@@ -47,30 +46,23 @@ export async function createSubscriptionAction(
   if (!userId) {
     return {
       error: "Требуется авторизация.",
-      needsDuplicateConfirm: false,
-      duplicateMessage: null,
-      confirmNonce: null,
     };
   }
 
-  const typeIdRaw = formData.get("typeId");
-  const customRaw = formData.get("custom");
-  const confirmDuplicateRaw = formData.get("confirmDuplicate");
   const nameRaw = formData.get("name");
-  const categoryIdRaw = formData.get("categoryId");
+  const categoryRaw = formData.get("category");
   const imgLinkRaw = formData.get("imgLink");
   const priceRaw = formData.get("price");
   const periodRaw = formData.get("period");
   const nextPaymentAtRaw = formData.get("nextPaymentAt");
   const paymentMethodRaw = formData.get("paymentMethodLabel");
 
-  const typeId = typeof typeIdRaw === "string" ? typeIdRaw : "";
-  const custom = typeof customRaw === "string" ? customRaw === "1" : !typeId;
-  const confirmDuplicate =
-    typeof confirmDuplicateRaw === "string" && confirmDuplicateRaw === "true";
   const name = typeof nameRaw === "string" ? nameRaw.trim() : "";
-  const categoryId = typeof categoryIdRaw === "string" ? categoryIdRaw : "";
   const imgLink = typeof imgLinkRaw === "string" ? imgLinkRaw.trim() : "";
+  const category =
+    typeof categoryRaw === "string" && isSubscriptionCategory(categoryRaw)
+      ? categoryRaw
+      : DEFAULT_SUBSCRIPTION_CATEGORY;
   const priceInput = typeof priceRaw === "string" ? priceRaw : "";
   const periodInput = typeof periodRaw === "string" ? periodRaw : "";
   const nextPaymentInput =
@@ -78,13 +70,16 @@ export async function createSubscriptionAction(
   const paymentMethodLabel =
     typeof paymentMethodRaw === "string" ? paymentMethodRaw.trim() : "";
 
+  if (!name || name.length < 2) {
+    return {
+      error: "Введите название сервиса (минимум 2 символа).",
+    };
+  }
+
   const price = parsePrice(priceInput);
   if (price === null) {
     return {
       error: "Введите корректную стоимость подписки.",
-      needsDuplicateConfirm: false,
-      duplicateMessage: null,
-      confirmNonce: null,
     };
   }
 
@@ -92,9 +87,6 @@ export async function createSubscriptionAction(
   if (!allowedPeriods.has(period)) {
     return {
       error: "Выберите корректный период подписки.",
-      needsDuplicateConfirm: false,
-      duplicateMessage: null,
-      confirmNonce: null,
     };
   }
 
@@ -102,111 +94,32 @@ export async function createSubscriptionAction(
   if (nextPaymentInput && !nextPaymentAt) {
     return {
       error: "Введите корректную дату ближайшей оплаты.",
-      needsDuplicateConfirm: false,
-      duplicateMessage: null,
-      confirmNonce: null,
     };
-  }
-
-  let finalTypeId = typeId;
-
-  if (custom || !typeId) {
-    if (!name || name.length < 2) {
-      return {
-        error: "Введите название сервиса (минимум 2 символа).",
-        needsDuplicateConfirm: false,
-        duplicateMessage: null,
-        confirmNonce: null,
-      };
-    }
-
-    if (!categoryId) {
-      return {
-        error: "Выберите категорию сервиса.",
-        needsDuplicateConfirm: false,
-        duplicateMessage: null,
-        confirmNonce: null,
-      };
-    }
-
-    const category = await prisma.category.findUnique({
-      where: { id: categoryId },
-      select: { id: true },
-    });
-
-    if (!category) {
-      return {
-        error: "Категория не найдена. Обновите страницу и попробуйте снова.",
-        needsDuplicateConfirm: false,
-        duplicateMessage: null,
-        confirmNonce: null,
-      };
-    }
-
-    const existingType = await prisma.type.findFirst({
-      where: {
-        name: {
-          equals: name,
-          mode: "insensitive",
-        },
-      },
-      select: { id: true },
-    });
-
-    if (existingType) {
-      finalTypeId = existingType.id;
-    } else {
-      const createdType = await prisma.type.create({
-        data: {
-          name,
-          categoryId,
-          link: "",
-          imgLink,
-        },
-        select: { id: true },
-      });
-
-      finalTypeId = createdType.id;
-    }
-  } else {
-    const existingType = await prisma.type.findUnique({
-      where: { id: typeId },
-      select: { id: true },
-    });
-
-    if (!existingType) {
-      return {
-        error: "Выбранная подписка не найдена.",
-        needsDuplicateConfirm: false,
-        duplicateMessage: null,
-        confirmNonce: null,
-      };
-    }
   }
 
   const duplicate = await prisma.subscribe.findFirst({
     where: {
       userId,
-      typeId: finalTypeId,
+      name: {
+        equals: name,
+        mode: "insensitive",
+      },
     },
-    include: {
-      type: { select: { name: true } },
-    },
+    select: { id: true },
   });
 
-  if (duplicate && !confirmDuplicate) {
+  if (duplicate) {
     return {
-      error: null,
-      needsDuplicateConfirm: true,
-      duplicateMessage: `Подписка "${duplicate.type.name}" уже есть у вас. Добавить еще одну?`,
-      confirmNonce: `${Date.now()}`,
+      error: `Подписка "${name}" уже есть у вас в списке.`,
     };
   }
 
   await prisma.subscribe.create({
     data: {
       userId,
-      typeId: finalTypeId,
+      name,
+      imgLink,
+      category,
       price,
       period,
       nextPaymentAt,
@@ -214,19 +127,12 @@ export async function createSubscriptionAction(
     },
   });
 
-  const type = await prisma.type.findUnique({
-    where: { id: finalTypeId },
-    select: { name: true },
-  });
-
-  const typeName = type?.name ?? "подписку";
-
   await prisma.notification.create({
     data: {
       userId,
       kind: "neutral",
       title: "Новая подписка",
-      message: `Вы успешно добавили ${typeName} в список.`,
+      message: `Вы успешно добавили ${name} в список.`,
     },
   });
 
@@ -250,7 +156,7 @@ export async function createSubscriptionAction(
           title: "Скоро списание",
           message: `${
             diffDays === 0 ? "Сегодня" : "Завтра"
-          } будет списано ${formatRub(price)} за ${typeName}.`,
+          } будет списано ${formatRub(price)} за ${name}.`,
         },
       });
     }

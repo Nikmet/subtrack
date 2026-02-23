@@ -1,7 +1,6 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { join } from "node:path";
 import { randomUUID } from "node:crypto";
 
+import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
@@ -15,7 +14,7 @@ const allowedMimeToExt: Record<string, string> = {
   "image/svg+xml": "svg",
 };
 
-const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024;
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -42,16 +41,25 @@ export async function POST(request: Request) {
     );
   }
 
-  const uploadDir = join(process.cwd(), "public", "uploads", "subscriptions");
-  await mkdir(uploadDir, { recursive: true });
+  try {
+    const fileName = `subscriptions/${session.user.id}/${randomUUID()}.${extension}`;
+    const blob = await put(fileName, file, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: file.type,
+    });
 
-  const fileName = `${randomUUID()}.${extension}`;
-  const filePath = join(uploadDir, fileName);
-  const bytes = Buffer.from(await file.arrayBuffer());
-  await writeFile(filePath, bytes);
-
-  return NextResponse.json({
-    url: `/uploads/subscriptions/${fileName}`,
-  });
+    return NextResponse.json({
+      url: blob.url,
+    });
+  } catch (error) {
+    console.error("Failed to upload subscription icon to Vercel Blob", error);
+    return NextResponse.json(
+      {
+        error:
+          "Не удалось загрузить иконку. Проверьте BLOB_READ_WRITE_TOKEN и подключение Vercel Blob.",
+      },
+      { status: 500 },
+    );
+  }
 }
-

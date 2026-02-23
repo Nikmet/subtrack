@@ -23,33 +23,21 @@ model User {
 }
 
 model Subscribe {
-    id               String    @id @default(uuid()) @db.Uuid
-    typeId           String    @db.Uuid
-    userId           String    @db.Uuid
-    price            Decimal   @db.Decimal(10, 2)
-    period           Int       @db.SmallInt
-    nextPaymentAt    DateTime?
+    id                 String               @id @default(uuid()) @db.Uuid
+    userId             String               @db.Uuid
+    name               String
+    imgLink            String
+    category           SubscriptionCategory
+    price              Decimal              @db.Decimal(10, 2)
+    period             Int                  @db.SmallInt
+    nextPaymentAt      DateTime?
     paymentMethodLabel String?
 
-    type Type @relation(fields: [typeId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-}
 
-model Type {
-    id         String      @id @default(uuid()) @db.Uuid
-    name       String      @unique
-    categoryId String      @db.Uuid
-    link       String
-    imgLink    String
-    category   Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    subscribes Subscribe[]
-}
-
-model Category {
-    id    String @id @default(uuid()) @db.Uuid
-    slug  String @unique
-    name  String @unique
-    types Type[]
+    @@unique([userId, name])
+    @@index([userId, nextPaymentAt])
+    @@index([name])
 }
 
 model Notification {
@@ -63,4 +51,14 @@ model Notification {
     user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@index([userId, createdAt])
+}
+
+enum SubscriptionCategory {
+    streaming
+    music
+    games
+    shopping
+    ai
+    finance
+    other
 }

@@ -77,7 +77,7 @@
 .subscriptionPrice {
     margin: 0;
     color: #1c374f;
-    font-size: clamp(28px, 3vw, 38px);
+    font-size: clamp(20px, 3vw, 30px);
     line-height: 1;
     font-weight: 800;
 }

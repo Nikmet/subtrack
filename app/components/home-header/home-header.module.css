@@ -37,14 +37,17 @@
 .notifyButton {
     display: grid;
     place-items: center;
-    width: 42px;
-    height: 42px;
+    width: 50px;
+    height: 50px;
     border-radius: 999px;
     border: 1px solid #cfd9e6;
     background: #f9fcff;
     color: #6d8093;
     text-decoration: none;
-    transition: color 160ms ease, border-color 160ms ease, background-color 160ms ease;
+    transition:
+        color 160ms ease,
+        border-color 160ms ease,
+        background-color 160ms ease;
 }
 
 .notifyButton svg {
@@ -70,8 +73,8 @@
 .avatar {
     display: grid;
     place-items: center;
-    width: 42px;
-    height: 42px;
+    width: 50px;
+    height: 50px;
     border-radius: 999px;
     border: 1px solid #cfdae6;
     background: linear-gradient(145deg, #ffffff 0%, #eef3f9 100%);

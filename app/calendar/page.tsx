@@ -183,7 +183,8 @@ const getEventsForMonth = (
         period: number;
         nextPaymentAt: Date | null;
         paymentMethodLabel: string | null;
-        type: { name: string; imgLink: string };
+        name: string;
+        imgLink: string;
     }>,
     monthStart: Date
 ) => {
@@ -208,8 +209,8 @@ const getEventsForMonth = (
             events.push({
                 id: `${subscribe.id}-${toIsoDate(occurrence)}`,
                 subscribeId: subscribe.id,
-                typeName: subscribe.type.name,
-                typeIcon: subscribe.type.imgLink,
+                typeName: subscribe.name,
+                typeIcon: subscribe.imgLink,
                 paymentMethodLabel: subscribe.paymentMethodLabel,
                 amount: Number(subscribe.price.toString()),
                 date: occurrence,
@@ -327,12 +328,8 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
             period: true,
             nextPaymentAt: true,
             paymentMethodLabel: true,
-            type: {
-                select: {
-                    name: true,
-                    imgLink: true
-                }
-            }
+            name: true,
+            imgLink: true
         }
     });
 
