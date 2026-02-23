@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { LoginForm } from "@/app/components/auth/login-form";
 
-import { LoginForm } from "./login-form";
 import styles from "./login.module.css";
 
 export default async function LoginPage() {

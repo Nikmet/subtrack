@@ -1,0 +1,91 @@
+.summaryCard {
+    border-radius: 18px;
+    padding: 24px 28px 22px;
+    min-height: 180px;
+    background: linear-gradient(120deg, #12243d 0%, #2d4668 100%);
+    box-shadow: 0 14px 32px rgba(19, 34, 54, 0.2);
+}
+
+.summaryLabel {
+    margin: 0 0 10px;
+    color: rgba(223, 233, 248, 0.95);
+    font-size: 12px;
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.summaryAmountRow {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.summaryAmount {
+    margin: 0;
+    color: #f6fbff;
+    font-size: clamp(42px, 6vw, 68px);
+    line-height: 0.95;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.summaryPerMonth {
+    margin: 0 0 7px;
+    color: rgba(221, 232, 246, 0.95);
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1;
+    font-weight: 600;
+}
+
+.summaryBadge {
+    margin-top: 18px;
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 7px 12px;
+    background: rgba(157, 177, 207, 0.24);
+    color: #eaf1fc;
+    font-size: 13px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.summaryBadgeDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #4de592;
+    box-shadow: 0 0 0 3px rgba(77, 229, 146, 0.18);
+}
+
+@media (max-width: 1023px) {
+    .summaryCard {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 699px) {
+    .summaryCard {
+        padding: 18px 18px 16px;
+        border-radius: 14px;
+    }
+
+    .summaryAmount {
+        font-size: clamp(36px, 13vw, 54px);
+    }
+
+    .summaryPerMonth {
+        margin-bottom: 4px;
+        font-size: clamp(22px, 8vw, 28px);
+    }
+
+    .summaryBadge {
+        margin-top: 14px;
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}

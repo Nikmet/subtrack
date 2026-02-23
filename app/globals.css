@@ -3,10 +3,10 @@
 :root {
     --background: #edf2f9;
     --foreground: #122035;
-    --rail-width-desktop: 198px;
+    --rail-width-desktop: 220px;
     --page-gutter-mobile: 14px;
-    --page-gutter-desktop: 24px;
-    --content-max-soft: 1360px;
+    --page-gutter-desktop: 22px;
+    --content-max-soft: 1480px;
 
     --fs-display: clamp(28px, 4.2vw, 40px);
     --fs-h1: clamp(24px, 3.2vw, 34px);
