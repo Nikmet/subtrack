@@ -269,6 +269,168 @@
     place-items: center;
 }
 
+.modalBackdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(12, 22, 37, 0.52);
+    backdrop-filter: blur(2px);
+    display: grid;
+    place-items: center;
+    z-index: 80;
+    padding: 20px;
+}
+
+.modalCard {
+    width: min(100%, 460px);
+    border-radius: 16px;
+    border: 1px solid #d4deea;
+    background: #f7f9fc;
+    box-shadow: 0 20px 48px rgba(9, 24, 43, 0.2);
+    padding: 14px;
+}
+
+.modalHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.modalTitle {
+    margin: 0;
+    color: #142b45;
+    font-size: 20px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.modalClose {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: #e9eff7;
+    color: #4f627a;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.modalServiceInfo {
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #d8e2ee;
+    background: #f1f5fa;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    align-items: center;
+    gap: 10px;
+}
+
+.modalIconWrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.modalIconImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modalIconFallback {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #e4ebf4;
+    color: #8494a8;
+    font-size: 16px;
+    font-weight: 800;
+    display: grid;
+    place-items: center;
+}
+
+.modalServiceText {
+    min-width: 0;
+}
+
+.modalServiceName {
+    margin: 0;
+    color: #122842;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modalServiceMeta {
+    margin: 2px 0 0;
+    color: #6c819b;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.modalForm {
+    margin-top: 12px;
+    display: grid;
+    gap: 10px;
+}
+
+.fieldGroup {
+    display: grid;
+    gap: 5px;
+}
+
+.label {
+    color: #9aaabd;
+    font-size: 12px;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.input {
+    width: 100%;
+    height: 42px;
+    border-radius: 10px;
+    border: 1px solid #d4deea;
+    background: #f3f6fa;
+    color: #182d49;
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 0 10px;
+    outline: none;
+}
+
+.input:focus {
+    border-color: #79aac8;
+    box-shadow: 0 0 0 3px rgba(121, 170, 200, 0.13);
+}
+
+.modalSubmitButton {
+    margin-top: 4px;
+    height: 44px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(140deg, #1fb8ce 0%, #43e0ca 100%);
+    color: #ffffff;
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.modalSubmitButton:disabled {
+    opacity: 0.72;
+    cursor: default;
+}
+
 @media (min-width: 1200px) {
     .page {
         padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));

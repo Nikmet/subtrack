@@ -48,7 +48,10 @@ export function AppMenu() {
     const isCalendar = pathname.startsWith("/calendar");
     const isSearch = pathname.startsWith("/search");
     const isProfile =
-        pathname.startsWith("/profile") || pathname.startsWith("/settings") || pathname.startsWith("/notifications");
+        pathname.startsWith("/profile") ||
+        pathname.startsWith("/settings") ||
+        pathname.startsWith("/notifications") ||
+        pathname.startsWith("/subscriptions/pending");
 
     return (
         <nav className={styles.menu} aria-label="Main menu">

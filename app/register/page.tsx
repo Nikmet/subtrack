@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { RegisterForm } from "@/app/components/auth/register-form";
@@ -7,7 +7,7 @@ import styles from "./register.module.css";
 
 export default async function RegisterPage() {
   const session = await auth();
-  if (session?.user) {
+  if (session?.user && !session.user.isBanned) {
     redirect("/");
   }
 

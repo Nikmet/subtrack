@@ -1,8 +1,9 @@
-"use server";
+﻿"use server";
 
 import { hash } from "bcryptjs";
 import { AuthError } from "next-auth";
 
+import { ADMIN_BOOTSTRAP_EMAIL } from "@/app/constants/auth";
 import { signIn } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
@@ -21,8 +22,7 @@ export async function registerAction(
   const passwordValue = formData.get("password");
 
   const name = typeof nameValue === "string" ? nameValue.trim() : "";
-  const email =
-    typeof emailValue === "string" ? emailValue.trim().toLowerCase() : "";
+  const email = typeof emailValue === "string" ? emailValue.trim().toLowerCase() : "";
   const password = typeof passwordValue === "string" ? passwordValue : "";
 
   if (!name || !email || !password) {
@@ -57,6 +57,7 @@ export async function registerAction(
       name,
       email,
       password: passwordHash,
+      role: email === ADMIN_BOOTSTRAP_EMAIL ? "ADMIN" : "USER",
     },
   });
 

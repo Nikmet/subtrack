@@ -1,26 +1,33 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { LoginForm } from "@/app/components/auth/login-form";
 
 import styles from "./login.module.css";
 
-export default async function LoginPage() {
+type LoginPageProps = {
+  searchParams: Promise<{
+    ban?: string;
+  }>;
+};
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
   const session = await auth();
-  if (session?.user) {
+  if (session?.user && !session.user.isBanned) {
     redirect("/");
   }
+
+  const params = await searchParams;
+  const banReason = (params.ban ?? "").trim();
 
   return (
     <main className={styles.page}>
       <section className={styles.card}>
         <p className={styles.overline}>SubTrack</p>
         <h1 className={styles.title}>Вход в аккаунт</h1>
-        <p className={styles.subtitle}>
-          Используйте email и пароль или создайте новый аккаунт.
-        </p>
+        <p className={styles.subtitle}>Используйте email и пароль или создайте новый аккаунт.</p>
 
-        <LoginForm />
+        <LoginForm initialError={banReason || null} />
       </section>
     </main>
   );

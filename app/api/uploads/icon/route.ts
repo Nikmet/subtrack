@@ -3,7 +3,9 @@ import { randomUUID } from "node:crypto";
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 
+import { DEFAULT_BAN_REASON } from "@/app/constants/auth";
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
@@ -18,8 +20,18 @@ const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
 export async function POST(request: Request) {
   const session = await auth();
-  if (!session?.user?.id) {
+  const userId = session?.user?.id;
+  if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { isBanned: true, banReason: true },
+  });
+
+  if (user?.isBanned) {
+    return NextResponse.json({ error: user.banReason?.trim() || DEFAULT_BAN_REASON }, { status: 403 });
   }
 
   const formData = await request.formData();
@@ -30,7 +42,7 @@ export async function POST(request: Request) {
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return NextResponse.json({ error: "Размер файла должен быть не более 2MB." }, { status: 400 });
+    return NextResponse.json({ error: "Размер файла должен быть не более 10MB." }, { status: 400 });
   }
 
   const extension = allowedMimeToExt[file.type];
@@ -42,7 +54,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const fileName = `subscriptions/${session.user.id}/${randomUUID()}.${extension}`;
+    const fileName = `subscriptions/${userId}/${randomUUID()}.${extension}`;
     const blob = await put(fileName, file, {
       access: "public",
       addRandomSuffix: false,

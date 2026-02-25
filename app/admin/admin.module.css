@@ -1,0 +1,146 @@
+.page {
+    min-height: 100vh;
+    background: #e8edf4;
+    padding: 18px 14px 32px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.backLink {
+    text-decoration: none;
+    color: #1a7f93;
+    font-weight: 700;
+}
+
+.title {
+    margin: 0;
+    color: #10233f;
+    font-size: 28px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.section {
+    margin-top: 18px;
+}
+
+.sectionTitle {
+    margin: 0 0 8px;
+    color: #122842;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.emptyText {
+    margin: 0;
+    color: #6b7f99;
+}
+
+.grid {
+    display: grid;
+    gap: 10px;
+}
+
+.card {
+    border-radius: 12px;
+    border: 1px solid #d7e0ec;
+    background: #f5f8fc;
+    padding: 12px;
+    display: grid;
+    gap: 8px;
+}
+
+.cardTitle {
+    margin: 0;
+    color: #112841;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.cardMeta {
+    margin: 0;
+    color: #50657f;
+    font-size: 13px;
+}
+
+.cardSubMeta {
+    margin: 0;
+    color: #6b7f99;
+    font-size: 12px;
+}
+
+.inlineForm {
+    display: grid;
+    gap: 6px;
+}
+
+.input {
+    width: 100%;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid #d4deea;
+    background: #ffffff;
+    color: #182d49;
+    font-size: 13px;
+    line-height: 1.2;
+    padding: 0 10px;
+    outline: none;
+}
+
+.publishButton,
+.deleteButton,
+.editLink {
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    display: inline-grid;
+    place-items: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.publishButton {
+    background: #def8e8;
+    color: #0f7a3f;
+}
+
+.deleteButton {
+    background: #ffe6ea;
+    color: #bd2d45;
+}
+
+.actionsRow {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.editLink {
+    width: fit-content;
+    padding: 0 12px;
+    background: #e2f1ff;
+    color: #1f5d95;
+}
+
+.bannedBadge {
+    margin: 0;
+    width: fit-content;
+    border-radius: 999px;
+    background: #ffe6ea;
+    color: #bd2d45;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 8px;
+}

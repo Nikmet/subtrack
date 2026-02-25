@@ -2,6 +2,7 @@ import { compare } from "bcryptjs";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
+import { ADMIN_BOOTSTRAP_EMAIL } from "@/app/constants/auth";
 import { prisma } from "@/lib/prisma";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
@@ -40,6 +41,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         const user = await prisma.user.findUnique({
           where: { email },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            password: true,
+            role: true,
+            isBanned: true,
+            banReason: true,
+          },
         });
 
         if (!user) {
@@ -51,10 +61,26 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           return null;
         }
 
+        if (user.isBanned) {
+          return null;
+        }
+
+        let role = user.role;
+        if (user.email === ADMIN_BOOTSTRAP_EMAIL && user.role !== "ADMIN") {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { role: "ADMIN" },
+          });
+          role = "ADMIN";
+        }
+
         return {
           id: user.id,
           name: user.name,
           email: user.email,
+          role,
+          isBanned: user.isBanned,
+          banReason: user.banReason,
         };
       },
     }),
@@ -63,7 +89,43 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = user.role;
+        token.isBanned = user.isBanned;
+        token.banReason = user.banReason;
       }
+
+      const tokenUserId = typeof token.id === "string" ? token.id : null;
+      if (!tokenUserId) {
+        return token;
+      }
+
+      const dbUser = await prisma.user.findUnique({
+        where: { id: tokenUserId },
+        select: {
+          id: true,
+          email: true,
+          role: true,
+          isBanned: true,
+          banReason: true,
+        },
+      });
+
+      if (!dbUser) {
+        return token;
+      }
+
+      if (dbUser.email === ADMIN_BOOTSTRAP_EMAIL && dbUser.role !== "ADMIN") {
+        await prisma.user.update({
+          where: { id: dbUser.id },
+          data: { role: "ADMIN" },
+        });
+        token.role = "ADMIN";
+      } else {
+        token.role = dbUser.role;
+      }
+
+      token.isBanned = dbUser.isBanned;
+      token.banReason = dbUser.banReason;
 
       return token;
     },
@@ -72,16 +134,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (session.user && tokenUserId) {
         session.user.id = tokenUserId;
+        session.user.role = token.role === "ADMIN" ? "ADMIN" : "USER";
+        session.user.isBanned = token.isBanned === true;
+        session.user.banReason =
+          typeof token.banReason === "string" ? token.banReason : null;
       }
 
       return session;
     },
     authorized({ request, auth }) {
       const isAuthorized = Boolean(auth?.user);
+      const isBanned = auth?.user?.isBanned === true;
       const pathname = request.nextUrl.pathname;
       const isAuthPage = pathname === "/login" || pathname === "/register";
 
-      if (isAuthPage && isAuthorized) {
+      if (isAuthPage && isAuthorized && !isBanned) {
         return Response.redirect(new URL("/", request.nextUrl));
       }
 
@@ -89,7 +156,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return true;
       }
 
-      return isAuthorized;
+      return isAuthorized && !isBanned;
     },
   },
 });

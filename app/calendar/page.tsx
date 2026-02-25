@@ -1,9 +1,8 @@
 ﻿import Link from "next/link";
-import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { AppMenu } from "@/app/components/app-menu/app-menu";
 import { SubscriptionIcon } from "@/app/components/subscription-icon/subscription-icon";
+import { getAuthorizedUser } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
 
 import styles from "./calendar.module.css";
@@ -19,10 +18,10 @@ type CalendarPageProps = {
 
 type BillingEvent = {
     id: string;
-    subscribeId: string;
+    subscriptionId: string;
     typeName: string;
     typeIcon: string;
-    paymentMethodLabel: string | null;
+    paymentCardLabel: string;
     amount: number;
     date: Date;
     isoDate: string;
@@ -177,27 +176,25 @@ const getSubscriptionWord = (count: number) => {
 const formatShortDayAndMonth = (date: Date) => `${date.getDate()} ${monthNamesShort[date.getMonth()]}`;
 
 const getEventsForMonth = (
-    subscribes: Array<{
+    subscriptions: Array<{
         id: string;
-        price: { toString(): string };
-        period: number;
-        nextPaymentAt: Date | null;
-        paymentMethodLabel: string | null;
-        name: string;
-        imgLink: string;
+        nextPaymentAt: Date;
+        paymentCardLabel: string;
+        commonSubscription: {
+            price: { toString(): string };
+            period: number;
+            name: string;
+            imgLink: string;
+        };
     }>,
     monthStart: Date
 ) => {
     const monthEnd = makeDate(monthStart.getFullYear(), monthStart.getMonth() + 1, 1);
     const events: BillingEvent[] = [];
 
-    for (const subscribe of subscribes) {
-        if (!subscribe.nextPaymentAt) {
-            continue;
-        }
-
-        const period = Math.max(subscribe.period, 1);
-        let occurrence = stripTime(subscribe.nextPaymentAt);
+    for (const subscription of subscriptions) {
+        const period = Math.max(subscription.commonSubscription.period, 1);
+        let occurrence = stripTime(subscription.nextPaymentAt);
         let safety = 0;
 
         while (occurrence < monthStart && safety < 240) {
@@ -207,12 +204,12 @@ const getEventsForMonth = (
 
         while (occurrence >= monthStart && occurrence < monthEnd && safety < 260) {
             events.push({
-                id: `${subscribe.id}-${toIsoDate(occurrence)}`,
-                subscribeId: subscribe.id,
-                typeName: subscribe.name,
-                typeIcon: subscribe.imgLink,
-                paymentMethodLabel: subscribe.paymentMethodLabel,
-                amount: Number(subscribe.price.toString()),
+                id: `${subscription.id}-${toIsoDate(occurrence)}`,
+                subscriptionId: subscription.id,
+                typeName: subscription.commonSubscription.name,
+                typeIcon: subscription.commonSubscription.imgLink,
+                paymentCardLabel: subscription.paymentCardLabel,
+                amount: Number(subscription.commonSubscription.price.toString()),
                 date: occurrence,
                 isoDate: toIsoDate(occurrence)
             });
@@ -294,12 +291,7 @@ const buildCalendarGrid = (
 };
 
 export default async function CalendarPage({ searchParams }: CalendarPageProps) {
-    const session = await auth();
-    const userId = session?.user?.id;
-
-    if (!userId) {
-        redirect("/login");
-    }
+    const user = await getAuthorizedUser();
 
     const params = await searchParams;
     const now = stripTime(new Date());
@@ -315,25 +307,23 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
     const selectedIso = toIsoDate(selectedDate);
     const todayIso = toIsoDate(now);
 
-    const subscribes = await prisma.subscribe.findMany({
+    const subscriptions = await prisma.userSubscription.findMany({
         where: {
-            userId,
-            nextPaymentAt: {
-                not: null
-            }
+            userId: user.id
         },
-        select: {
-            id: true,
-            price: true,
-            period: true,
-            nextPaymentAt: true,
-            paymentMethodLabel: true,
-            name: true,
-            imgLink: true
+        include: {
+            commonSubscription: {
+                select: {
+                    price: true,
+                    period: true,
+                    name: true,
+                    imgLink: true
+                }
+            }
         }
     });
 
-    const events = getEventsForMonth(subscribes, monthStart);
+    const events = getEventsForMonth(subscriptions, monthStart);
 
     const eventsByDay = new Map<string, BillingEvent[]>();
     for (const event of events) {
@@ -344,7 +334,7 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
 
     const selectedDayEvents = eventsByDay.get(selectedIso) ?? [];
     const monthTotal = events.reduce((sum, event) => sum + event.amount, 0);
-    const monthUniqueSubscriptions = new Set(events.map(event => event.subscribeId)).size;
+    const monthUniqueSubscriptions = new Set(events.map(event => event.subscriptionId)).size;
 
     const isCurrentMonth = now.getFullYear() === monthStart.getFullYear() && now.getMonth() === monthStart.getMonth();
 
@@ -458,7 +448,7 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
                                     <div className={styles.eventMain}>
                                         <p className={styles.eventName}>{event.typeName}</p>
                                         <p className={styles.eventSubtext}>
-                                            {event.paymentMethodLabel ? event.paymentMethodLabel : "Автосписание"}
+                                            {event.paymentCardLabel || "Автосписание"}
                                         </p>
                                     </div>
                                     <p className={styles.eventAmount}>{formatRub(event.amount)}</p>
@@ -489,3 +479,4 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
         </main>
     );
 }
+

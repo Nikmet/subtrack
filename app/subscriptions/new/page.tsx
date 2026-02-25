@@ -1,19 +1,15 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
+﻿import Link from "next/link";
 
-import { auth } from "@/auth";
 import { AppMenu } from "@/app/components/app-menu/app-menu";
 import { NewSubscriptionForm } from "@/app/components/subscriptions/new-subscription-form";
+import { getAuthorizedUser } from "@/lib/auth-guards";
 
 import styles from "./new-subscription.module.css";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewSubscriptionPage() {
-  const session = await auth();
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
+  await getAuthorizedUser();
 
   return (
     <main className={styles.page}>
@@ -22,7 +18,7 @@ export default async function NewSubscriptionPage() {
           <Link href="/search" className={styles.backButton} aria-label="Назад к поиску">
             ×
           </Link>
-          <h1 className={styles.title}>Новая подписка</h1>
+          <h1 className={styles.title}>Новая общая подписка</h1>
           <span className={styles.headerPlaceholder} />
         </header>
 

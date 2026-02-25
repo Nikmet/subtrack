@@ -1,9 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useActionState, useState, type ChangeEvent } from "react";
 
 import { SUBSCRIPTION_CATEGORIES } from "@/app/constants/subscription-categories";
-import { createSubscriptionAction, type NewSubscriptionState } from "@/app/subscriptions/new/actions";
+import {
+  createCommonSubscriptionAction,
+  type NewSubscriptionState,
+} from "@/app/subscriptions/new/actions";
 import styles from "./new-subscription-form.module.css";
 
 const initialState: NewSubscriptionState = {
@@ -17,15 +20,8 @@ const periods = [
   { value: "12", label: "Раз в год" },
 ];
 
-const todayDateString = () => {
-  const date = new Date();
-  const month = `${date.getMonth() + 1}`.padStart(2, "0");
-  const day = `${date.getDate()}`.padStart(2, "0");
-  return `${date.getFullYear()}-${month}-${day}`;
-};
-
 export function NewSubscriptionForm() {
-  const [state, formAction, isPending] = useActionState(createSubscriptionAction, initialState);
+  const [state, formAction, isPending] = useActionState(createCommonSubscriptionAction, initialState);
   const [iconUrl, setIconUrl] = useState("");
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -132,20 +128,10 @@ export function NewSubscriptionForm() {
         </select>
       </div>
 
-      <div className={styles.fieldGroup}>
-        <label className={styles.label}>Дата ближайшей оплаты</label>
-        <input className={styles.input} type="date" name="nextPaymentAt" defaultValue={todayDateString()} />
-      </div>
-
-      <div className={styles.fieldGroup}>
-        <label className={styles.label}>Способ оплаты</label>
-        <input className={styles.input} type="text" name="paymentMethodLabel" placeholder="Напр. Visa •••• 4242" />
-      </div>
-
       {state.error ? <p className={styles.errorText}>{state.error}</p> : null}
 
       <button className={styles.submitButton} type="submit" disabled={isPending || isUploading}>
-        {isPending ? "Сохраняем..." : "Добавить подписку"}
+        {isPending ? "Сохраняем..." : "Создать подписку"}
       </button>
     </form>
   );

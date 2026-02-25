@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import { HomePageContent } from "@/app/components/home-page-content/home-page-content";
 import { HomeToastTrigger } from "@/app/components/toast/home-toast-trigger";
 import { getHomeScreenData } from "@/app/services/home/get-home-screen-data";
+import { getAuthorizedUser } from "@/lib/auth-guards";
 
 export const dynamic = "force-dynamic";
 
@@ -15,15 +15,9 @@ type HomePageProps = {
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-    const session = await auth();
-    const userId = session?.user?.id;
+    const user = await getAuthorizedUser();
 
-    if (!userId) {
-        redirect("/login");
-    }
-
-    const screenData = await getHomeScreenData(userId);
-
+    const screenData = await getHomeScreenData(user.id);
     if (!screenData) {
         redirect("/login");
     }
