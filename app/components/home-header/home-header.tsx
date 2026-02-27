@@ -1,13 +1,15 @@
 import Link from "next/link";
 
+import { UserAvatar } from "@/app/components/user-avatar/user-avatar";
 import styles from "./home-header.module.css";
 import { BellIcon } from "lucide-react";
 
 type HomeHeaderProps = {
     userInitials: string;
+    userAvatarLink: string | null;
 };
 
-export function HomeHeader({ userInitials }: HomeHeaderProps) {
+export function HomeHeader({ userInitials, userAvatarLink }: HomeHeaderProps) {
     return (
         <header className={styles.topBar}>
             <div className={styles.headerBlock}>
@@ -20,7 +22,14 @@ export function HomeHeader({ userInitials }: HomeHeaderProps) {
                     <BellIcon />
                 </Link>
                 <Link href="/profile" className={styles.avatarLink} aria-label="Профиль">
-                    <span className={styles.avatar}>{userInitials || "?"}</span>
+                    <UserAvatar
+                        src={userAvatarLink}
+                        name="Профиль"
+                        wrapperClassName={styles.avatarWrap}
+                        imageClassName={styles.avatarImage}
+                        fallbackClassName={styles.avatar}
+                        fallbackText={userInitials || "?"}
+                    />
                 </Link>
             </div>
         </header>

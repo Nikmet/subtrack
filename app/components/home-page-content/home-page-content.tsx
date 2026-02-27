@@ -16,7 +16,7 @@ export function HomePageContent({ screenData }: HomePageContentProps) {
     return (
         <main className={styles.page}>
             <div className={styles.container}>
-                <HomeHeader userInitials={screenData.userInitials} />
+                <HomeHeader userInitials={screenData.userInitials} userAvatarLink={screenData.userAvatarLink} />
 
                 <div className={styles.layout}>
                     <div className={styles.leftColumn}>
@@ -30,6 +30,8 @@ export function HomePageContent({ screenData }: HomePageContentProps) {
                     <AnalyticsSection
                         categoryStats={screenData.categoryStats}
                         categoryTotal={screenData.categoryTotal}
+                        cardStats={screenData.cardStats}
+                        cardTotal={screenData.cardTotal}
                     />
                 </div>
             </div>

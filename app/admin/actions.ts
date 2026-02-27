@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -8,6 +8,7 @@ import { requireAdminUser } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
 
 const allowedPeriods = new Set([1, 3, 6, 12]);
+const allowedReturnPaths = new Set(["/admin/moderation", "/admin/published", "/admin/users"]);
 
 const parsePrice = (value: string): number | null => {
   const normalized = value.replace(",", ".").trim();
@@ -17,6 +18,17 @@ const parsePrice = (value: string): number | null => {
   }
 
   return parsed;
+};
+
+const getReturnTo = (formData: FormData, fallback: string) => {
+  const returnToRaw = formData.get("returnTo");
+  const returnTo = typeof returnToRaw === "string" ? returnToRaw.trim() : "";
+
+  if (allowedReturnPaths.has(returnTo)) {
+    return returnTo;
+  }
+
+  return fallback;
 };
 
 const createNotificationForUsers = async (userIds: string[], title: string, message: string, kind: string) => {
@@ -34,8 +46,28 @@ const createNotificationForUsers = async (userIds: string[], title: string, mess
   });
 };
 
+const toAdminRedirect = (basePath: string, toastType: string, name?: string) => {
+  const params = new URLSearchParams({ toast: toastType });
+  if (name) {
+    params.set("name", name);
+  }
+  return `${basePath}?${params.toString()}`;
+};
+
+const revalidateAdminData = () => {
+  revalidatePath("/admin");
+  revalidatePath("/admin/moderation");
+  revalidatePath("/admin/published");
+  revalidatePath("/admin/users");
+  revalidatePath("/admin/banks");
+  revalidatePath("/search");
+  revalidatePath("/");
+  revalidatePath("/subscriptions/pending");
+};
+
 export async function publishCommonSubscriptionAction(formData: FormData) {
   const admin = await requireAdminUser();
+  const returnTo = getReturnTo(formData, "/admin/moderation");
 
   const commonSubscriptionIdRaw = formData.get("commonSubscriptionId");
   const moderationCommentRaw = formData.get("moderationComment");
@@ -45,7 +77,7 @@ export async function publishCommonSubscriptionAction(formData: FormData) {
     typeof moderationCommentRaw === "string" ? moderationCommentRaw.trim() : null;
 
   if (!commonSubscriptionId) {
-    redirect("/admin");
+    redirect(returnTo);
   }
 
   const subscription = await prisma.commonSubscription.update({
@@ -73,14 +105,12 @@ export async function publishCommonSubscriptionAction(formData: FormData) {
     });
   }
 
-  revalidatePath("/admin");
-  revalidatePath("/search");
-  revalidatePath("/subscriptions/pending");
-  redirect("/admin");
+  revalidateAdminData();
+  redirect(toAdminRedirect(returnTo, "published", subscription.name));
 }
 
 export async function deleteCommonSubscriptionAction(formData: FormData) {
-  await requireAdminUser();
+  const admin = await requireAdminUser();
 
   const commonSubscriptionIdRaw = formData.get("commonSubscriptionId");
   const reasonRaw = formData.get("reason");
@@ -89,7 +119,7 @@ export async function deleteCommonSubscriptionAction(formData: FormData) {
   const reason = typeof reasonRaw === "string" ? reasonRaw.trim() : "";
 
   if (!commonSubscriptionId || !reason) {
-    redirect("/admin");
+    redirect("/admin/moderation");
   }
 
   const subscription = await prisma.commonSubscription.findUnique({
@@ -108,7 +138,38 @@ export async function deleteCommonSubscriptionAction(formData: FormData) {
   });
 
   if (!subscription) {
-    redirect("/admin");
+    redirect("/admin/moderation");
+  }
+
+  const fallbackPath = subscription.status === "PUBLISHED" ? "/admin/published" : "/admin/moderation";
+  const returnTo = getReturnTo(formData, fallbackPath);
+
+  if (subscription.status === "PENDING") {
+    await prisma.commonSubscription.update({
+      where: {
+        id: subscription.id,
+      },
+      data: {
+        status: "REJECTED",
+        moderatedByUserId: admin.id,
+        moderatedAt: new Date(),
+        moderationComment: reason,
+      },
+    });
+
+    if (subscription.createdByUserId) {
+      await prisma.notification.create({
+        data: {
+          userId: subscription.createdByUserId,
+          kind: "warning",
+          title: "Заявка отклонена",
+          message: `Подписка "${subscription.name}" отклонена модератором. Причина: ${reason}.`,
+        },
+      });
+    }
+
+    revalidateAdminData();
+    redirect(toAdminRedirect(returnTo, "rejected", subscription.name));
   }
 
   const affectedUserIds = [...new Set(subscription.subscriptions.map((item) => item.userId))];
@@ -119,17 +180,6 @@ export async function deleteCommonSubscriptionAction(formData: FormData) {
     },
   });
 
-  if (subscription.status === "PENDING" && subscription.createdByUserId) {
-    await prisma.notification.create({
-      data: {
-        userId: subscription.createdByUserId,
-        kind: "warning",
-        title: "Заявка отклонена",
-        message: `Подписка "${subscription.name}" отклонена модератором. Причина: ${reason}.`,
-      },
-    });
-  }
-
   if (subscription.status === "PUBLISHED") {
     await createNotificationForUsers(
       affectedUserIds,
@@ -139,11 +189,8 @@ export async function deleteCommonSubscriptionAction(formData: FormData) {
     );
   }
 
-  revalidatePath("/admin");
-  revalidatePath("/search");
-  revalidatePath("/");
-  revalidatePath("/subscriptions/pending");
-  redirect("/admin");
+  revalidateAdminData();
+  redirect(toAdminRedirect(returnTo, "deleted", subscription.name));
 }
 
 export async function updateCommonSubscriptionAction(formData: FormData) {
@@ -168,7 +215,7 @@ export async function updateCommonSubscriptionAction(formData: FormData) {
     typeof moderationCommentRaw === "string" ? moderationCommentRaw.trim() : null;
 
   if (!commonSubscriptionId || name.length < 2) {
-    redirect("/admin");
+    redirect("/admin/published");
   }
 
   const price = parsePrice(priceInput);
@@ -199,13 +246,13 @@ export async function updateCommonSubscriptionAction(formData: FormData) {
     },
   });
 
-  revalidatePath("/admin");
-  revalidatePath("/search");
-  redirect("/admin");
+  revalidateAdminData();
+  redirect("/admin/published");
 }
 
 export async function banUserAction(formData: FormData) {
   await requireAdminUser();
+  const returnTo = getReturnTo(formData, "/admin/users");
 
   const userIdRaw = formData.get("userId");
   const reasonRaw = formData.get("reason");
@@ -213,7 +260,7 @@ export async function banUserAction(formData: FormData) {
   const reason = typeof reasonRaw === "string" ? reasonRaw.trim() : "";
 
   if (!userId || !reason) {
-    redirect("/admin");
+    redirect(returnTo);
   }
 
   const target = await prisma.user.findUnique({
@@ -222,7 +269,7 @@ export async function banUserAction(formData: FormData) {
   });
 
   if (!target || target.role === "ADMIN") {
-    redirect("/admin");
+    redirect(returnTo);
   }
 
   await prisma.user.update({
@@ -234,19 +281,19 @@ export async function banUserAction(formData: FormData) {
     },
   });
 
-  revalidatePath("/admin");
-  revalidatePath("/search");
-  redirect("/admin");
+  revalidateAdminData();
+  redirect(returnTo);
 }
 
 export async function unbanUserAction(formData: FormData) {
   await requireAdminUser();
+  const returnTo = getReturnTo(formData, "/admin/users");
 
   const userIdRaw = formData.get("userId");
   const userId = typeof userIdRaw === "string" ? userIdRaw.trim() : "";
 
   if (!userId) {
-    redirect("/admin");
+    redirect(returnTo);
   }
 
   await prisma.user.update({
@@ -258,7 +305,6 @@ export async function unbanUserAction(formData: FormData) {
     },
   });
 
-  revalidatePath("/admin");
-  revalidatePath("/search");
-  redirect("/admin");
+  revalidateAdminData();
+  redirect(returnTo);
 }

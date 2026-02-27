@@ -18,14 +18,25 @@ model User {
     email                      String               @unique
     password                   String
     name                       String
+    avatarLink                 String?
     role                       UserRole             @default(USER)
     isBanned                   Boolean              @default(false)
     banReason                  String?
     bannedAt                   DateTime?
     subscriptions              UserSubscription[]
+    paymentMethods             PaymentMethod[]
     notifications              Notification[]
     createdCommonSubscriptions CommonSubscription[] @relation("CommonSubscriptionCreatedBy")
     moderatedCommonSubs        CommonSubscription[] @relation("CommonSubscriptionModeratedBy")
+}
+
+model Bank {
+    id             String          @id @default(uuid()) @db.Uuid
+    name           String          @unique
+    iconLink       String
+    createdAt      DateTime        @default(now())
+    updatedAt      DateTime        @updatedAt
+    paymentMethods PaymentMethod[]
 }
 
 model CommonSubscription {
@@ -57,16 +68,19 @@ model UserSubscription {
     id                   String             @id @default(uuid()) @db.Uuid
     userId               String             @db.Uuid
     commonSubscriptionId String             @db.Uuid
+    paymentMethodId      String?            @db.Uuid
     nextPaymentAt        DateTime
     paymentCardLabel     String
     createdAt            DateTime           @default(now())
 
     user               User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     commonSubscription CommonSubscription @relation(fields: [commonSubscriptionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    paymentMethod      PaymentMethod?     @relation(fields: [paymentMethodId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
     @@unique([userId, commonSubscriptionId])
     @@index([userId, nextPaymentAt])
     @@index([commonSubscriptionId])
+    @@index([paymentMethodId])
 }
 
 model Notification {
@@ -80,6 +94,24 @@ model Notification {
     user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@index([userId, createdAt])
+}
+
+model PaymentMethod {
+    id            String             @id @default(uuid()) @db.Uuid
+    userId        String             @db.Uuid
+    bankId        String             @db.Uuid
+    cardNumber    String
+    isDefault     Boolean            @default(false)
+    createdAt     DateTime           @default(now())
+    updatedAt     DateTime           @updatedAt
+    user          User               @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    bank          Bank               @relation(fields: [bankId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    subscriptions UserSubscription[]
+
+    @@index([userId])
+    @@index([bankId])
+    @@index([userId, isDefault])
+    @@unique([userId, cardNumber])
 }
 
 enum SubscriptionCategory {
@@ -100,4 +132,5 @@ enum UserRole {
 enum CommonSubscriptionStatus {
     PENDING
     PUBLISHED
+    REJECTED
 }

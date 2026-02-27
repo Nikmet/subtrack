@@ -1,5 +1,6 @@
 ﻿import { AppMenu } from "@/app/components/app-menu/app-menu";
 import { getAuthorizedUser } from "@/lib/auth-guards";
+import { prisma } from "@/lib/prisma";
 
 import { getCategories, getPopularTypes, getTypeById, searchTypes } from "./data";
 import { SearchClient } from "./search-client";
@@ -24,11 +25,38 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const attach = (params.attach ?? "").trim();
   const hasFilters = q.length > 0 || category.length > 0;
 
-  const [categories, popularTypes, attachType] = await Promise.all([
+  const [categories, popularTypes, attachType, paymentMethods, banks] = await Promise.all([
     getCategories(),
     getPopularTypes(8),
     attach ? getTypeById(attach, user.role === "ADMIN") : Promise.resolve(null),
+    prisma.paymentMethod.findMany({
+      where: {
+        userId: user.id,
+      },
+      orderBy: [{ isDefault: "desc" }, { createdAt: "asc" }, { id: "asc" }],
+      select: {
+        id: true,
+        bankId: true,
+        cardNumber: true,
+        isDefault: true,
+        bank: {
+          select: {
+            name: true,
+            iconLink: true,
+          },
+        },
+      },
+    }),
+    prisma.bank.findMany({
+      orderBy: [{ name: "asc" }, { id: "asc" }],
+      select: {
+        id: true,
+        name: true,
+        iconLink: true,
+      },
+    }),
   ]);
+
   const matchedTypes = hasFilters ? await searchTypes(q, category || undefined) : [];
 
   return (
@@ -42,6 +70,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           matchedTypes={matchedTypes}
           popularTypes={popularTypes}
           attachType={attachType}
+          paymentMethods={paymentMethods}
+          banks={banks}
         />
       </div>
 

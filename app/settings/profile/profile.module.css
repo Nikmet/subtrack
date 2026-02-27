@@ -1,0 +1,154 @@
+﻿.page {
+    min-height: 100vh;
+    background: #e8edf4;
+    padding: 0 0 104px;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--content-max-soft);
+    margin: 0 auto;
+}
+
+.header {
+    min-height: 62px;
+    border-bottom: 1px solid #dde5ef;
+    background: #f5f8fc;
+    display: grid;
+    grid-template-columns: 34px 1fr 34px;
+    align-items: center;
+    padding: 0 12px;
+}
+
+.backButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    color: #0f2742;
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    line-height: 1;
+}
+
+.title {
+    margin: 0;
+    text-align: center;
+    color: #0f2742;
+    font-size: var(--fs-h2);
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.spacer {
+    width: 34px;
+}
+
+.form {
+    margin: 14px 12px 0;
+    border-radius: 14px;
+    border: 1px solid #dce4ee;
+    background: #f6f9fc;
+    padding: 12px;
+    display: grid;
+    gap: 8px;
+}
+
+.avatarSection {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+}
+
+.avatarWrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarFallback {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #ebf5ff;
+    font-size: 30px;
+    font-weight: 800;
+    border: 3px solid #b8f0e5;
+    background: linear-gradient(145deg, #244b7d 0%, #0f1f34 100%);
+}
+
+.uploadButton {
+    height: 34px;
+    border-radius: 10px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    background: #e2f1ff;
+    color: #1f5d95;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.fileInput {
+    display: none;
+}
+
+.label {
+    color: #7e91a9;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+}
+
+.input {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid #d4deea;
+    background: #ffffff;
+    color: #182d49;
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 0 10px;
+    outline: none;
+}
+
+.submitButton {
+    margin-top: 4px;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    background: #def8e8;
+    color: #0f7a3f;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.errorText {
+    margin: 0;
+    color: #bd2d45;
+    font-size: 12px;
+}
+
+@media (min-width: 1200px) {
+    .page {
+        padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
+    }
+
+    .form {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}

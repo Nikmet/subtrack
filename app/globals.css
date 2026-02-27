@@ -36,3 +36,30 @@ body {
 *::after {
     box-sizing: border-box;
 }
+
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #dbe5f0;
+}
+
+.skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        rgba(219, 229, 240, 0) 0%,
+        rgba(255, 255, 255, 0.55) 50%,
+        rgba(219, 229, 240, 0) 100%
+    );
+    animation: skeleton-shimmer 1.2s infinite;
+}
+
+@keyframes skeleton-shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}

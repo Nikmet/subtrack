@@ -1,9 +1,11 @@
-.rightColumn {
+﻿.rightColumn {
     display: grid;
     align-content: start;
+    gap: 14px;
 }
 
-.categorySection {
+.categorySection,
+.cardsSection {
     border-radius: 16px;
     border: 1px solid #d8e2ec;
     background: #ffffff;
@@ -11,7 +13,8 @@
     box-shadow: 0 10px 24px rgba(25, 48, 77, 0.07);
 }
 
-.analyticsHeader {
+.analyticsHeader,
+.cardsHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -28,7 +31,8 @@
     letter-spacing: -0.02em;
 }
 
-.analyticsTotal {
+.analyticsTotal,
+.cardsTotal {
     margin: 0;
     border-radius: 999px;
     background: #eef4f9;
@@ -40,9 +44,65 @@
     white-space: nowrap;
 }
 
-.categoryList {
+.cardsTitle {
+    margin: 0;
+    color: #1b3550;
+    font-size: 22px;
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.categoryList,
+.cardsList {
     display: grid;
     gap: 14px;
+}
+
+.cardRow {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+    border-radius: 12px;
+    border: 1px solid #e0e8f2;
+    background: #f5f8fb;
+    padding: 10px;
+}
+
+.cardRowMain {
+    min-width: 0;
+}
+
+.cardLabel {
+    margin: 0;
+    color: #142f4a;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardMeta {
+    margin: 2px 0 0;
+    color: #6f8398;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.cardAmount {
+    margin: 0;
+    color: #132a43;
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+.cardsEmptyText {
+    margin: 0;
+    color: #6f8398;
+    font-size: 14px;
 }
 
 .categoryEmpty {
@@ -79,11 +139,13 @@
 }
 
 @media (max-width: 699px) {
-    .categorySection {
+    .categorySection,
+    .cardsSection {
         border-radius: 14px;
     }
 
-    .analyticsHeader {
+    .analyticsHeader,
+    .cardsHeader {
         margin-bottom: 14px;
     }
 
@@ -91,7 +153,12 @@
         font-size: clamp(26px, 8vw, 32px);
     }
 
-    .analyticsTotal {
+    .cardsTitle {
+        font-size: 20px;
+    }
+
+    .analyticsTotal,
+    .cardsTotal {
         font-size: 12px;
         padding: 5px 10px;
     }

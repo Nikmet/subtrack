@@ -1,6 +1,6 @@
 ﻿import { OTHER_CATEGORY_NAME } from "@/app/constants/home";
 import { getSubscriptionCategoryLabel } from "@/app/constants/subscription-categories";
-import type { CategoryStat, HomeScreenData, SubscriptionListItem } from "@/app/types/home";
+import type { CardStat, CategoryStat, HomeScreenData, SubscriptionListItem } from "@/app/types/home";
 import { prisma } from "@/lib/prisma";
 
 const getInitials = (name: string) =>
@@ -59,11 +59,49 @@ const buildCategoryStats = (items: SubscriptionListItem[]) => {
   };
 };
 
+const buildCardStats = (
+  items: Array<{
+    paymentCardLabel: string;
+    monthlyPrice: number;
+  }>,
+) => {
+  const grouped = new Map<string, { amount: number; subscriptionsCount: number }>();
+
+  for (const item of items) {
+    const key = item.paymentCardLabel.trim() || "Автосписание";
+    const current = grouped.get(key) ?? { amount: 0, subscriptionsCount: 0 };
+    grouped.set(key, {
+      amount: current.amount + item.monthlyPrice,
+      subscriptionsCount: current.subscriptionsCount + 1,
+    });
+  }
+
+  const sorted = [...grouped.entries()]
+    .map(([label, value]) => ({
+      label,
+      amount: value.amount,
+      subscriptionsCount: value.subscriptionsCount,
+    }))
+    .sort((a, b) => b.amount - a.amount || b.subscriptionsCount - a.subscriptionsCount);
+
+  const limited = sorted.slice(0, 4);
+  const total = limited.reduce((sum, item) => sum + item.amount, 0);
+  const stats: CardStat[] = limited.map((item) => ({
+    label: item.label,
+    amount: item.amount,
+    subscriptionsCount: item.subscriptionsCount,
+    share: total > 0 ? (item.amount / total) * 100 : 0,
+  }));
+
+  return { stats, total };
+};
+
 export async function getHomeScreenData(userId: string): Promise<HomeScreenData | null> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
       name: true,
+      avatarLink: true,
     },
   });
 
@@ -97,13 +135,22 @@ export async function getHomeScreenData(userId: string): Promise<HomeScreenData 
 
   const monthlyTotal = subscriptions.reduce((sum, item) => sum + item.monthlyPrice, 0);
   const { stats, total } = buildCategoryStats(subscriptions);
+  const { stats: cardStats, total: cardTotal } = buildCardStats(
+    userSubscriptions.map((item) => ({
+      paymentCardLabel: item.paymentCardLabel,
+      monthlyPrice: toMonthlyAmount(Number(item.commonSubscription.price.toString()), item.commonSubscription.period),
+    })),
+  );
 
   return {
     userInitials: getInitials(user.name),
+    userAvatarLink: user.avatarLink,
     monthlyTotal,
     subscriptionsCount: subscriptions.length,
     subscriptions,
     categoryStats: stats,
     categoryTotal: total,
+    cardStats,
+    cardTotal,
   };
 }

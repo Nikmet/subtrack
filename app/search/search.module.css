@@ -68,6 +68,13 @@
     text-transform: uppercase;
 }
 
+.paginationInfo {
+    margin: 0;
+    color: #8899af;
+    font-size: 12px;
+    line-height: 1.2;
+}
+
 .categoryGrid {
     margin-top: 8px;
     display: grid;
@@ -104,6 +111,7 @@
     margin-top: 8px;
     display: grid;
     gap: 8px;
+    grid-template-columns: 1fr;
 }
 
 .itemCard {
@@ -269,6 +277,41 @@
     place-items: center;
 }
 
+.pagination {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.paginationLink {
+    height: 32px;
+    min-width: 32px;
+    border-radius: 9px;
+    border: 1px solid #d4deea;
+    background: #ffffff;
+    color: #1a2d47;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.paginationLink[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.45;
+}
+
+.paginationLinkActive {
+    border-color: #68b7cc;
+    background: #e8f8fc;
+    color: #1a6577;
+}
+
 .modalBackdrop {
     position: fixed;
     inset: 0;
@@ -431,6 +474,12 @@
     cursor: default;
 }
 
+@media (min-width: 860px) {
+    .list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (min-width: 1200px) {
     .page {
         padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
@@ -438,5 +487,15 @@
 
     .categoryGrid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1520px) {
+    .list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 }

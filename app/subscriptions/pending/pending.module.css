@@ -137,13 +137,26 @@
 .status {
     margin: 7px 0 0;
     width: fit-content;
-    border-radius: 999px;
-    background: #f6edcc;
-    color: #8b6e12;
     font-size: 11px;
     font-weight: 800;
     padding: 4px 8px;
     text-transform: uppercase;
+    border-radius: 999px;
+}
+
+.statusPending {
+    background: #f6edcc;
+    color: #8b6e12;
+}
+
+.statusPublished {
+    background: #daf8e8;
+    color: #0f7a3f;
+}
+
+.statusRejected {
+    background: #ffe6ea;
+    color: #bd2d45;
 }
 
 .comment {

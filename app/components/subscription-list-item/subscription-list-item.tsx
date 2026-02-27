@@ -1,6 +1,7 @@
 import { SubscriptionIcon } from "@/app/components/subscription-icon/subscription-icon";
 
 import { formatNextPayment, formatRub } from "@/app/utils/home-formatters";
+import { formatPeriodLabel } from "@/app/utils/subscription-formatters";
 import type { SubscriptionListItem as SubscriptionListItemType } from "@/app/types/home";
 
 import styles from "./subscription-list-item.module.css";
@@ -23,7 +24,7 @@ export function SubscriptionListItem({ item }: SubscriptionListItemProps) {
             <div className={styles.subscriptionMain}>
                 <h3 className={styles.subscriptionName}>{item.typeName}</h3>
                 <p className={styles.subscriptionMeta}>
-                    {item.categoryName} • {formatNextPayment(item.nextPaymentAt)}
+                    {item.categoryName} • {formatNextPayment(item.nextPaymentAt)} • {formatPeriodLabel(item.period)}
                 </p>
             </div>
 

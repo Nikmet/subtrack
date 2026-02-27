@@ -15,11 +15,21 @@ export type CategoryStat = {
     share: number;
 };
 
+export type CardStat = {
+    label: string;
+    amount: number;
+    share: number;
+    subscriptionsCount: number;
+};
+
 export type HomeScreenData = {
     userInitials: string;
+    userAvatarLink: string | null;
     monthlyTotal: number;
     subscriptionsCount: number;
     subscriptions: SubscriptionListItem[];
     categoryStats: CategoryStat[];
     categoryTotal: number;
+    cardStats: CardStat[];
+    cardTotal: number;
 };

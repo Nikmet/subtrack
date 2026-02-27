@@ -3,6 +3,8 @@ import { type ReactNode } from "react";
 
 import { signOut } from "@/auth";
 import { AppMenu } from "@/app/components/app-menu/app-menu";
+import { UserAvatar } from "@/app/components/user-avatar/user-avatar";
+import { formatPaymentMethodLabel } from "@/app/utils/payment-method-formatters";
 import { getAuthorizedUser } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
 
@@ -14,7 +16,8 @@ type SettingsData = {
   name: string;
   email: string;
   initials: string;
-  paymentCardLabel: string;
+  avatarLink: string | null;
+  defaultPaymentMethodLabel: string;
   role: "USER" | "ADMIN";
 };
 
@@ -30,18 +33,19 @@ async function getSettingsData(userId: string): Promise<SettingsData | null> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: {
-      subscriptions: {
+      paymentMethods: {
         where: {
-          paymentCardLabel: {
-            not: "",
-          },
+          isDefault: true,
         },
-        orderBy: {
-          id: "asc",
-        },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
         take: 1,
         select: {
-          paymentCardLabel: true,
+          cardNumber: true,
+          bank: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
     },
@@ -55,7 +59,10 @@ async function getSettingsData(userId: string): Promise<SettingsData | null> {
     name: user.name,
     email: user.email,
     initials: getInitials(user.name),
-    paymentCardLabel: user.subscriptions[0]?.paymentCardLabel ?? "Не указан",
+    avatarLink: user.avatarLink,
+    defaultPaymentMethodLabel: user.paymentMethods[0]
+      ? formatPaymentMethodLabel(user.paymentMethods[0].bank.name, user.paymentMethods[0].cardNumber)
+      : "Не указан",
     role: user.role,
   };
 }
@@ -164,7 +171,14 @@ export default async function SettingsPage() {
 
         <section className={styles.profileCard}>
           <div className={styles.avatarWrap}>
-            <div className={styles.avatar}>{settingsData.initials}</div>
+            <UserAvatar
+              src={settingsData.avatarLink}
+              name={settingsData.name}
+              wrapperClassName={styles.avatarWrap}
+              imageClassName={styles.avatarImage}
+              fallbackClassName={styles.avatar}
+              fallbackText={settingsData.initials}
+            />
           </div>
 
           <h2 className={styles.name}>{settingsData.name}</h2>
@@ -175,16 +189,17 @@ export default async function SettingsPage() {
         <section className={styles.section}>
           <h3 className={styles.sectionTitle}>Учетная запись</h3>
           <div className={styles.group}>
-            <SettingsRow icon={<UserIcon />} title="Личные данные" />
+            <SettingsRow href="/settings/profile" icon={<UserIcon />} title="Личные данные" />
             <SettingsRow
+              href="/settings/payment-methods"
               icon={<CardIcon />}
               title="Способы оплаты"
-              subtitle={settingsData.paymentCardLabel}
-              value={settingsData.paymentCardLabel}
+              subtitle={settingsData.defaultPaymentMethodLabel}
+              value={settingsData.defaultPaymentMethodLabel}
             />
-            <SettingsRow icon={<ShieldIcon />} title="Безопасность" />
+            <SettingsRow href="/settings/security" icon={<ShieldIcon />} title="Безопасность" />
             {settingsData.role === "ADMIN" ? (
-              <SettingsRow href="/admin" icon={<ShieldIcon />} title="Админ-панель" subtitle="Модерация" />
+              <SettingsRow href="/admin" icon={<ShieldIcon />} title="Админ-панель" subtitle="Разделы управления" />
             ) : null}
           </div>
         </section>

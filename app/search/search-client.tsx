@@ -1,14 +1,33 @@
 ﻿"use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormStatus } from "react-dom";
 
 import { SubscriptionIcon } from "@/app/components/subscription-icon/subscription-icon";
+import { formatPaymentMethodLabel } from "@/app/utils/payment-method-formatters";
+import { formatPeriodLabel } from "@/app/utils/subscription-formatters";
 
 import { createUserSubscriptionAction } from "./actions";
 import type { SearchCategory, SearchSubscriptionItem } from "./data";
 import styles from "./search.module.css";
+
+type SearchPaymentMethod = {
+  id: string;
+  bankId: string;
+  cardNumber: string;
+  isDefault: boolean;
+  bank: {
+    name: string;
+    iconLink: string;
+  };
+};
+
+type SearchBank = {
+  id: string;
+  name: string;
+  iconLink: string;
+};
 
 type SearchClientProps = {
   q: string;
@@ -18,7 +37,11 @@ type SearchClientProps = {
   matchedTypes: SearchSubscriptionItem[];
   popularTypes: SearchSubscriptionItem[];
   attachType: SearchSubscriptionItem | null;
+  paymentMethods: SearchPaymentMethod[];
+  banks: SearchBank[];
 };
+
+const NEW_PAYMENT_METHOD_VALUE = "__new__";
 
 const formatRub = (value: number | null) =>
   value === null
@@ -66,17 +89,31 @@ export function SearchClient({
   matchedTypes,
   popularTypes,
   attachType,
+  paymentMethods,
+  banks,
 }: SearchClientProps) {
+  const defaultPaymentMethodId = useMemo(() => {
+    if (paymentMethods.length === 0) {
+      return NEW_PAYMENT_METHOD_VALUE;
+    }
+
+    return paymentMethods.find((item) => item.isDefault)?.id ?? paymentMethods[0]?.id ?? NEW_PAYMENT_METHOD_VALUE;
+  }, [paymentMethods]);
+
   const [selectedItem, setSelectedItem] = useState<SearchSubscriptionItem | null>(attachType);
   const [nextPaymentAt, setNextPaymentAt] = useState(
     attachType ? getDefaultNextPaymentDate(attachType.period) : "",
   );
-  const [paymentCardLabel, setPaymentCardLabel] = useState("");
+  const [paymentMethodId, setPaymentMethodId] = useState(defaultPaymentMethodId);
+  const [newPaymentMethodBankId, setNewPaymentMethodBankId] = useState(banks[0]?.id ?? "");
+  const [newPaymentMethodCardNumber, setNewPaymentMethodCardNumber] = useState("");
 
   const openModal = (item: SearchSubscriptionItem) => {
     setSelectedItem(item);
     setNextPaymentAt(getDefaultNextPaymentDate(item.period));
-    setPaymentCardLabel("");
+    setPaymentMethodId(defaultPaymentMethodId);
+    setNewPaymentMethodBankId(banks[0]?.id ?? "");
+    setNewPaymentMethodCardNumber("");
   };
 
   const closeModal = () => {
@@ -98,11 +135,13 @@ export function SearchClient({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [selectedItem]);
 
+  const showNewPaymentMethodForm = paymentMethodId === NEW_PAYMENT_METHOD_VALUE;
+
   return (
     <>
       <h1 className={styles.title}>Поиск</h1>
 
-      <form className={styles.searchForm} action="/search" method="GET">
+      <form className={styles.searchForm} action="/search/all" method="GET">
         <input
           className={styles.searchInput}
           type="text"
@@ -119,7 +158,7 @@ export function SearchClient({
           {categories.map((item) => (
             <Link
               key={item.id}
-              href={`/search?${new URLSearchParams({
+              href={`/search/all?${new URLSearchParams({
                 ...(q ? { q } : {}),
                 category: item.slug,
               }).toString()}`}
@@ -135,8 +174,8 @@ export function SearchClient({
         <section className={styles.section}>
           <div className={styles.sectionHead}>
             <h2 className={styles.sectionTitle}>Результаты</h2>
-            <Link href="/search" className={styles.sectionLink}>
-              Сбросить
+            <Link href="/search/all" className={styles.sectionLink}>
+              Все результаты
             </Link>
           </div>
 
@@ -153,7 +192,7 @@ export function SearchClient({
                   />
                   <div className={styles.itemMain}>
                     <p className={styles.itemName}>{item.name}</p>
-                    <p className={styles.itemCategory}>{item.categoryName}</p>
+                    <p className={styles.itemCategory}>{item.categoryName} • {formatPeriodLabel(item.period)}</p>
                   </div>
                   <div className={styles.itemPriceWrap}>
                     <p className={styles.itemPrice}>{formatRub(item.suggestedMonthlyPrice)}</p>
@@ -186,7 +225,7 @@ export function SearchClient({
       <section className={styles.section}>
         <div className={styles.sectionHead}>
           <h2 className={styles.sectionTitle}>Популярные</h2>
-          <Link href="/search" className={styles.sectionLink}>
+          <Link href="/search/all" className={styles.sectionLink}>
             Все
           </Link>
         </div>
@@ -203,7 +242,7 @@ export function SearchClient({
               />
               <div className={styles.itemMain}>
                 <p className={styles.itemName}>{item.name}</p>
-                <p className={styles.itemCategory}>{item.categoryName}</p>
+                <p className={styles.itemCategory}>{item.categoryName} • {formatPeriodLabel(item.period)}</p>
               </div>
               <div className={styles.itemPriceWrap}>
                 <p className={styles.itemPrice}>{formatRub(item.suggestedMonthlyPrice)}</p>
@@ -257,7 +296,7 @@ export function SearchClient({
               <div className={styles.modalServiceText}>
                 <p className={styles.modalServiceName}>{selectedItem.name}</p>
                 <p className={styles.modalServiceMeta}>
-                  {selectedItem.categoryName} • {formatRub(selectedItem.price)} / {selectedItem.period} мес.
+                  {selectedItem.categoryName} • {formatRub(selectedItem.price)} • {formatPeriodLabel(selectedItem.period)}
                 </p>
               </div>
             </div>
@@ -281,20 +320,66 @@ export function SearchClient({
               </div>
 
               <div className={styles.fieldGroup}>
-                <label className={styles.label} htmlFor="paymentCardLabel">
-                  Карта списания
+                <label className={styles.label} htmlFor="paymentMethodId">
+                  Способ оплаты
                 </label>
-                <input
-                  id="paymentCardLabel"
+                <select
+                  id="paymentMethodId"
                   className={styles.input}
-                  type="text"
-                  name="paymentCardLabel"
-                  placeholder="Напр. Visa **** 4242"
-                  value={paymentCardLabel}
-                  onChange={(event) => setPaymentCardLabel(event.target.value)}
-                  required
-                />
+                  name="paymentMethodId"
+                  value={paymentMethodId}
+                  onChange={(event) => setPaymentMethodId(event.target.value)}
+                >
+                  {paymentMethods.map((method) => (
+                    <option key={method.id} value={method.id}>
+                      {formatPaymentMethodLabel(method.bank.name, method.cardNumber)}{method.isDefault ? " (по умолчанию)" : ""}
+                    </option>
+                  ))}
+                  <option value={NEW_PAYMENT_METHOD_VALUE}>Новая карта</option>
+                </select>
               </div>
+
+              {showNewPaymentMethodForm ? (
+                <>
+                  <div className={styles.fieldGroup}>
+                    <label className={styles.label} htmlFor="newPaymentMethodBankId">
+                      Банк
+                    </label>
+                    <select
+                      id="newPaymentMethodBankId"
+                      className={styles.input}
+                      name="newPaymentMethodBankId"
+                      value={newPaymentMethodBankId}
+                      onChange={(event) => setNewPaymentMethodBankId(event.target.value)}
+                      required
+                    >
+                      {banks.map((bank) => (
+                        <option key={bank.id} value={bank.id}>
+                          {bank.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className={styles.fieldGroup}>
+                    <label className={styles.label} htmlFor="newPaymentMethodCardNumber">
+                      Номер карты
+                    </label>
+                    <input
+                      id="newPaymentMethodCardNumber"
+                      className={styles.input}
+                      type="text"
+                      name="newPaymentMethodCardNumber"
+                      placeholder="Например, **** 4242"
+                      value={newPaymentMethodCardNumber}
+                      onChange={(event) => setNewPaymentMethodCardNumber(event.target.value)}
+                      minLength={4}
+                      maxLength={24}
+                      required
+                    />
+                  </div>
+                </>
+              ) : null}
 
               <SubmitButton />
             </form>

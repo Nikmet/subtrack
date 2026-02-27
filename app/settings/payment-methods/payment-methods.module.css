@@ -1,0 +1,204 @@
+.page {
+    min-height: 100vh;
+    background: #e8edf4;
+    padding: 0 0 104px;
+}
+
+.container {
+    width: 100%;
+    max-width: var(--content-max-soft);
+    margin: 0 auto;
+}
+
+.header {
+    min-height: 62px;
+    border-bottom: 1px solid #dde5ef;
+    background: #f5f8fc;
+    display: grid;
+    grid-template-columns: 34px 1fr 34px;
+    align-items: center;
+    padding: 0 12px;
+}
+
+.backButton {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    color: #0f2742;
+    text-decoration: none;
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    line-height: 1;
+}
+
+.title {
+    margin: 0;
+    text-align: center;
+    color: #0f2742;
+    font-size: var(--fs-h2);
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.spacer {
+    width: 34px;
+}
+
+.section {
+    margin: 14px 12px 0;
+}
+
+.sectionTitle {
+    margin: 0 0 8px;
+    color: #91a4bc;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.createForm {
+    display: grid;
+    gap: 8px;
+    border-radius: 14px;
+    border: 1px solid #dce4ee;
+    background: #f6f9fc;
+    padding: 10px;
+}
+
+.methodsList {
+    display: grid;
+    gap: 10px;
+}
+
+.methodCard {
+    display: grid;
+    gap: 8px;
+    border-radius: 14px;
+    border: 1px solid #dce4ee;
+    background: #f6f9fc;
+    padding: 10px;
+}
+
+.methodHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.bankSummary {
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    align-items: center;
+    gap: 8px;
+}
+
+.bankIcon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #d6e0ec;
+    background: #ffffff;
+}
+
+.methodLabel {
+    margin: 0;
+    color: #10253f;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.defaultBadge {
+    height: 24px;
+    border-radius: 999px;
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    background: #def8e8;
+    color: #0f7a3f;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.methodMeta {
+    margin: 0;
+    color: #6b7f99;
+    font-size: 12px;
+}
+
+.inlineForm {
+    display: grid;
+    gap: 6px;
+}
+
+.actionsRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.input {
+    width: 100%;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid #d4deea;
+    background: #ffffff;
+    color: #182d49;
+    font-size: 14px;
+    line-height: 1.2;
+    padding: 0 10px;
+    outline: none;
+}
+
+.primaryButton,
+.secondaryButton,
+.deleteButton {
+    height: 36px;
+    border: none;
+    border-radius: 10px;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.primaryButton {
+    background: #def8e8;
+    color: #0f7a3f;
+}
+
+.secondaryButton {
+    background: #e2f1ff;
+    color: #1f5d95;
+}
+
+.deleteButton {
+    background: #ffe6ea;
+    color: #bd2d45;
+}
+
+.emptyText {
+    margin: 0;
+    color: #6b7f99;
+}
+
+@media (min-width: 1200px) {
+    .page {
+        padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
+    }
+
+    .section {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .methodsList {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

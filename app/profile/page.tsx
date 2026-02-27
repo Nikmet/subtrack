@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { signOut } from "@/auth";
 import { AppMenu } from "@/app/components/app-menu/app-menu";
+import { UserAvatar } from "@/app/components/user-avatar/user-avatar";
 import { getAuthorizedUser } from "@/lib/auth-guards";
 import { prisma } from "@/lib/prisma";
 
@@ -14,6 +15,7 @@ type ProfileData = {
   name: string;
   email: string;
   initials: string;
+  avatarLink: string | null;
   yearlyTotal: number;
   activeSubscriptions: number;
 };
@@ -62,6 +64,7 @@ async function getProfileData(userId: string): Promise<ProfileData | null> {
     name: user.name,
     email: user.email,
     initials: getInitials(user.name),
+    avatarLink: user.avatarLink,
     yearlyTotal: Math.round(monthlyTotal * 12),
     activeSubscriptions: user.subscriptions.length,
   };
@@ -139,7 +142,14 @@ export default async function ProfilePage() {
           </div>
 
           <div className={styles.userRow}>
-            <div className={styles.avatar}>{profileData.initials}</div>
+            <UserAvatar
+              src={profileData.avatarLink}
+              name={profileData.name}
+              wrapperClassName={styles.avatarWrap}
+              imageClassName={styles.avatarImage}
+              fallbackClassName={styles.avatar}
+              fallbackText={profileData.initials}
+            />
             <div className={styles.userText}>
               <h2 className={styles.userName}>{profileData.name}</h2>
               <p className={styles.userEmail}>{profileData.email}</p>

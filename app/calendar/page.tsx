@@ -406,73 +406,75 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
                     </div>
                 </section>
 
-                <section className={styles.daySection}>
-                    <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>{formatDayTitle(selectedDate)}</h2>
-                        <p className={styles.sectionMeta}>
-                            {selectedDayEvents.length} {getSubscriptionWord(selectedDayEvents.length)}
-                        </p>
-                    </div>
-
-                    {selectedDayEvents.length === 0 ? (
-                        <div className={styles.emptyCard}>
-                            <div className={styles.emptyIcon} aria-hidden>
-                                <svg viewBox="0 0 24 24">
-                                    <path
-                                        d="M12 4a5 5 0 0 0-5 5v2.8c0 .5-.2 1-.5 1.4L5 15h14l-1.5-1.8a2 2 0 0 1-.5-1.4V9a5 5 0 0 0-5-5Z"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="1.8"
-                                        strokeLinejoin="round"
-                                    />
-                                    <path d="M10 18a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" />
-                                </svg>
+                <div className={styles.sideColumn}>
+                    <section className={styles.summarySection}>
+                        <h3 className={styles.summaryTitle}>В этом месяце</h3>
+                        <article className={styles.summaryCard}>
+                            <p className={styles.summaryLabel}>
+                                Всего к оплате в {monthNamesPrepositional[monthStart.getMonth()]}
+                            </p>
+                            <p className={styles.summaryAmount}>{formatRub(monthTotal)}</p>
+                            <div className={styles.summaryBadges}>
+                                <span className={styles.badge}>{monthUniqueSubscriptions} активных</span>
+                                <span className={styles.badgeAccent}>
+                                    {nextEvent ? `Следующая: ${formatShortDayAndMonth(nextEvent.date)}` : "Нет оплат"}
+                                </span>
                             </div>
-                            <p className={styles.emptyText}>
-                                На этот день оплат не запланировано.
-                                <br />
-                                Отличный день для экономии!
+                        </article>
+                    </section>
+
+                    <section className={styles.daySection}>
+                        <div className={styles.sectionHeader}>
+                            <h2 className={styles.sectionTitle}>{formatDayTitle(selectedDate)}</h2>
+                            <p className={styles.sectionMeta}>
+                                {selectedDayEvents.length} {getSubscriptionWord(selectedDayEvents.length)}
                             </p>
                         </div>
-                    ) : (
-                        <div className={styles.eventsList}>
-                            {selectedDayEvents.map(event => (
-                                <article className={styles.eventCard} key={event.id}>
-                                    <SubscriptionIcon
-                                        src={event.typeIcon}
-                                        name={event.typeName}
-                                        wrapperClassName={styles.eventIconWrap}
-                                        imageClassName={styles.eventIconImage}
-                                        fallbackClassName={styles.eventIconFallback}
-                                    />
-                                    <div className={styles.eventMain}>
-                                        <p className={styles.eventName}>{event.typeName}</p>
-                                        <p className={styles.eventSubtext}>
-                                            {event.paymentCardLabel || "Автосписание"}
-                                        </p>
-                                    </div>
-                                    <p className={styles.eventAmount}>{formatRub(event.amount)}</p>
-                                </article>
-                            ))}
-                        </div>
-                    )}
-                </section>
 
-                <section className={styles.summarySection}>
-                    <h3 className={styles.summaryTitle}>В этом месяце</h3>
-                    <article className={styles.summaryCard}>
-                        <p className={styles.summaryLabel}>
-                            Всего к оплате в {monthNamesPrepositional[monthStart.getMonth()]}
-                        </p>
-                        <p className={styles.summaryAmount}>{formatRub(monthTotal)}</p>
-                        <div className={styles.summaryBadges}>
-                            <span className={styles.badge}>{monthUniqueSubscriptions} активных</span>
-                            <span className={styles.badgeAccent}>
-                                {nextEvent ? `Следующая: ${formatShortDayAndMonth(nextEvent.date)}` : "Нет оплат"}
-                            </span>
-                        </div>
-                    </article>
-                </section>
+                        {selectedDayEvents.length === 0 ? (
+                            <div className={styles.emptyCard}>
+                                <div className={styles.emptyIcon} aria-hidden>
+                                    <svg viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 4a5 5 0 0 0-5 5v2.8c0 .5-.2 1-.5 1.4L5 15h14l-1.5-1.8a2 2 0 0 1-.5-1.4V9a5 5 0 0 0-5-5Z"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="1.8"
+                                            strokeLinejoin="round"
+                                        />
+                                        <path d="M10 18a2 2 0 0 0 4 0" stroke="currentColor" strokeWidth="1.8" />
+                                    </svg>
+                                </div>
+                                <p className={styles.emptyText}>
+                                    На этот день оплат не запланировано.
+                                    <br />
+                                    Отличный день для экономии!
+                                </p>
+                            </div>
+                        ) : (
+                            <div className={styles.eventsList}>
+                                {selectedDayEvents.map(event => (
+                                    <article className={styles.eventCard} key={event.id}>
+                                        <SubscriptionIcon
+                                            src={event.typeIcon}
+                                            name={event.typeName}
+                                            wrapperClassName={styles.eventIconWrap}
+                                            imageClassName={styles.eventIconImage}
+                                            fallbackClassName={styles.eventIconFallback}
+                                        />
+                                        <div className={styles.eventMain}>
+                                            <p className={styles.eventName}>{event.typeName}</p>
+                                            <p className={styles.eventSubtext}>
+                                                {event.paymentCardLabel || "Автосписание"}
+                                            </p>
+                                        </div>
+                                        <p className={styles.eventAmount}>{formatRub(event.amount)}</p>
+                                    </article>
+                                ))}
+                            </div>
+                        )}
+                    </section>
+                </div>
             </div>
 
             <AppMenu />

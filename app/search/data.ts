@@ -26,6 +26,14 @@ export type SearchCategory = {
   name: string;
 };
 
+export type SearchCatalogPage = {
+  items: SearchSubscriptionItem[];
+  total: number;
+  totalPages: number;
+  page: number;
+  pageSize: number;
+};
+
 const toMonthlyAmount = (price: { toString(): string }, period: number) => {
   const numericPrice = Number(price.toString());
   const safePeriod = Math.max(period, 1);
@@ -120,6 +128,52 @@ export async function searchTypes(
 export async function getPopularTypes(limit = 8): Promise<SearchSubscriptionItem[]> {
   const services = await getCatalog();
   return services.slice(0, limit);
+}
+
+type GetCatalogPageParams = {
+  q?: string;
+  category?: string;
+  page?: number;
+  pageSize?: number;
+};
+
+export async function getCatalogPage({
+  q = "",
+  category = "",
+  page = 1,
+  pageSize = 24,
+}: GetCatalogPageParams): Promise<SearchCatalogPage> {
+  const normalizedQuery = q.trim().toLocaleLowerCase("ru-RU");
+  const hasCategory = isSubscriptionCategory(category);
+  const safePageSize = Math.max(Math.trunc(pageSize), 1);
+  const catalog = await getCatalog();
+
+  const filteredByCategory = hasCategory
+    ? catalog.filter((item) => item.categorySlug === category)
+    : catalog;
+
+  const filtered =
+    normalizedQuery.length === 0
+      ? filteredByCategory
+      : filteredByCategory.filter((item) => {
+          const name = item.name.toLocaleLowerCase("ru-RU");
+          const categoryName = item.categoryName.toLocaleLowerCase("ru-RU");
+          return name.includes(normalizedQuery) || categoryName.includes(normalizedQuery);
+        });
+
+  const total = filtered.length;
+  const totalPages = Math.max(Math.ceil(total / safePageSize), 1);
+  const safePage = Math.min(Math.max(Math.trunc(page), 1), totalPages);
+  const startIndex = (safePage - 1) * safePageSize;
+  const items = filtered.slice(startIndex, startIndex + safePageSize);
+
+  return {
+    items,
+    total,
+    totalPages,
+    page: safePage,
+    pageSize: safePageSize,
+  };
 }
 
 export async function getTypeById(

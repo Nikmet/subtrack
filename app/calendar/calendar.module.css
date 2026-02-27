@@ -10,6 +10,10 @@
     margin: 0 auto;
 }
 
+.sideColumn {
+    margin-top: 16px;
+}
+
 .calendarCard {
     background: #f8fafc;
     border-radius: 16px;
@@ -261,7 +265,7 @@
 }
 
 .summarySection {
-    margin-top: 20px;
+    margin-top: 0;
 }
 
 .summaryTitle {
@@ -327,5 +331,27 @@
 @media (min-width: 1200px) {
     .page {
         padding: 20px var(--page-gutter-desktop) 28px calc(var(--rail-width-desktop) + var(--page-gutter-desktop));
+    }
+
+    .container {
+        max-width: none;
+        display: grid;
+        grid-template-columns: minmax(680px, 5fr) minmax(320px, 3fr);
+        align-items: start;
+        gap: 24px;
+    }
+
+    .calendarCard {
+        padding: 4px 16px 16px;
+    }
+
+    .sideColumn {
+        margin-top: 0;
+        display: grid;
+        gap: 18px;
+    }
+
+    .daySection {
+        margin-top: 0;
     }
 }

@@ -78,5 +78,14 @@ export async function createCommonSubscriptionAction(
     },
   });
 
-  redirect("/subscriptions/pending");
+  await prisma.notification.create({
+    data: {
+      userId: user.id,
+      kind: "info",
+      title: "Заявка отправлена на модерацию",
+      message: `Подписка "${name}" отправлена на проверку модератору.`,
+    },
+  });
+
+  redirect(`/subscriptions/pending?toast=submitted&name=${encodeURIComponent(name)}`);
 }

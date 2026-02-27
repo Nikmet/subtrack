@@ -1,4 +1,4 @@
-.page {
+﻿.page {
     min-height: 100vh;
     background: #e8edf4;
     padding: 18px 14px 32px;
@@ -37,6 +37,44 @@
     padding: 12px;
     display: grid;
     gap: 8px;
+}
+
+.iconField {
+    display: grid;
+    gap: 8px;
+    justify-items: start;
+}
+
+.iconPreview {
+    width: 88px;
+    height: 88px;
+    border-radius: 14px;
+    border: 1px solid #d4deea;
+    object-fit: cover;
+    background: #eaf0f7;
+}
+
+.uploadLabel {
+    height: 34px;
+    border-radius: 10px;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    background: #e2f1ff;
+    color: #1f5d95;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.fileInput {
+    display: none;
+}
+
+.uploadError {
+    margin: 0;
+    color: #bd2d45;
+    font-size: 12px;
 }
 
 .label {
