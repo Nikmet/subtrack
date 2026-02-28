@@ -1,0 +1,6 @@
+BEGIN;
+
+ALTER TABLE "User"
+  ADD COLUMN IF NOT EXISTS "avatarLink" TEXT;
+
+COMMIT;

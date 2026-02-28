@@ -2,11 +2,19 @@
     "name": "subtrack",
     "version": "0.1.0",
     "private": true,
+    "workspaces": [
+        "server",
+        "client"
+    ],
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "eslint"
+        "dev": "concurrently -n server,client -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w client\"",
+        "build": "npm run build --workspaces --if-present",
+        "lint": "npm run lint --workspaces --if-present",
+        "typecheck": "npm run typecheck --workspaces --if-present",
+        "test": "npm run test --workspaces --if-present",
+        "legacy:dev": "next dev",
+        "legacy:build": "next build",
+        "legacy:start": "next start"
     },
     "dependencies": {
         "@prisma/adapter-pg": "^7.4.0",
@@ -27,6 +35,7 @@
         "@types/pg": "^8.16.0",
         "@types/react": "^19",
         "@types/react-dom": "^19",
+        "concurrently": "^9.2.1",
         "eslint": "^9",
         "eslint-config-next": "16.1.6",
         "prisma": "^7.3.0",
